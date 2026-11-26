@@ -1,0 +1,3592 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>바이오 트윈 (Bio-Twin) · 2036 예방 헬스케어 오프라인 앱</title>
+  <style>
+    /* =====================================================================
+       바이오 트윈 (Bio-Twin) 100% 오프라인 단독 실행 스타일시트
+       - 외부 CDN / 외부 폰트 / 외부 스크립트 의존성 ZERO
+       - PC, 태블릿, 모바일 완벽 반응형 지원
+       ===================================================================== */
+    :root {
+      --primary: #0f5c6e;
+      --primary-dark: #0a4250;
+      --primary-light: #e6f4f7;
+      --primary-soft: #f3fafb;
+      --accent: #0ea5e9;
+      --bg: #f1f5f9;
+      --surface: #ffffff;
+      --surface-alt: #f8fafc;
+      --border: #dbe4ec;
+      --text: #0f172a;
+      --text-sub: #475569;
+      --text-muted: #64748b;
+      --green: #10b981;
+      --green-bg: #ecfdf5;
+      --green-border: #a7f3d0;
+      --amber: #f59e0b;
+      --amber-bg: #fffbeb;
+      --amber-border: #fde68a;
+      --red: #ef4444;
+      --red-bg: #fef2f2;
+      --red-border: #fecaca;
+      --radius-lg: 22px;
+      --radius-md: 14px;
+      --radius-sm: 10px;
+      --shadow-sm: 0 2px 10px rgba(15, 23, 42, 0.05);
+      --shadow-md: 0 10px 30px rgba(15, 23, 42, 0.08);
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    button, input, select {
+      font-family: inherit;
+    }
+
+    /* 상단 헤더 */
+    .app-header {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      background: rgba(255, 255, 255, 0.94);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .header-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 12px 18px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-mark {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #0f5c6e 0%, #17869c 100%);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 16px;
+      letter-spacing: -0.02em;
+      box-shadow: 0 4px 12px rgba(15, 92, 110, 0.25);
+      flex-shrink: 0;
+    }
+
+    .brand-title {
+      margin: 0;
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--text);
+      letter-spacing: -0.02em;
+    }
+
+    .brand-sub {
+      margin: 2px 0 0 0;
+      font-size: 12px;
+      color: var(--text-sub);
+    }
+
+    .header-controls {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .offline-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 11px;
+      border-radius: 999px;
+      background: var(--green-bg);
+      border: 1px solid var(--green-border);
+      color: #065f46;
+      font-size: 11.5px;
+      font-weight: 700;
+    }
+
+    .offline-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--green);
+      display: inline-block;
+    }
+
+    /* 타임머신 토글 */
+    .year-switch {
+      display: inline-flex;
+      background: #e2e8f0;
+      padding: 3px;
+      border-radius: 12px;
+      gap: 2px;
+    }
+
+    .year-btn {
+      border: none;
+      background: transparent;
+      color: var(--text-sub);
+      font-size: 12px;
+      font-weight: 800;
+      padding: 7px 12px;
+      border-radius: 9px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .year-btn.active {
+      background: var(--primary);
+      color: #ffffff;
+      box-shadow: 0 2px 8px rgba(15, 92, 110, 0.28);
+    }
+
+    .year-btn.active-2036 {
+      background: linear-gradient(135deg, #b45309 0%, #d97706 100%);
+      color: #ffffff;
+      box-shadow: 0 2px 8px rgba(180, 83, 9, 0.3);
+    }
+
+    /* 5단계 네비게이션 바 */
+    .step-nav-wrap {
+      max-width: 1280px;
+      margin: 14px auto 0 auto;
+      padding: 0 18px;
+    }
+
+    .step-nav {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+    }
+
+    .step-tab {
+      border: 1px solid var(--border);
+      background: var(--surface);
+      border-radius: 14px;
+      padding: 10px 8px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      color: var(--text-sub);
+    }
+
+    .step-tab:hover {
+      border-color: var(--primary);
+      background: var(--primary-soft);
+    }
+
+    .step-tab.active {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #ffffff;
+      box-shadow: 0 4px 14px rgba(15, 92, 110, 0.22);
+    }
+
+    .step-num {
+      display: block;
+      font-size: 11px;
+      font-weight: 700;
+      opacity: 0.85;
+    }
+
+    .step-name {
+      display: block;
+      font-size: 13px;
+      font-weight: 800;
+      margin-top: 2px;
+    }
+
+    /* 메인 레이아웃: 좌측 3D 트윈 뷰어 / 우측 단계별 콘솔 */
+    .main-grid {
+      max-width: 1280px;
+      margin: 16px auto 28px auto;
+      padding: 0 18px;
+      display: grid;
+      grid-template-columns: minmax(320px, 440px) 1fr;
+      gap: 18px;
+      align-items: start;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-sm);
+    }
+
+    /* 좌측 트윈 뷰어 카드 */
+    .viewer-card {
+      padding: 18px;
+      position: sticky;
+      top: 84px;
+    }
+
+    .viewer-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .viewer-badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--primary);
+      background: var(--primary-light);
+      padding: 4px 9px;
+      border-radius: 999px;
+    }
+
+    .viewer-persona {
+      margin: 5px 0 0 0;
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--text);
+    }
+
+    .aura-pill {
+      font-size: 11.5px;
+      font-weight: 800;
+      padding: 5px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--green-border);
+      background: var(--green-bg);
+      color: #065f46;
+      white-space: nowrap;
+    }
+
+    .aura-pill.warn {
+      border-color: var(--amber-border);
+      background: var(--amber-bg);
+      color: #92400e;
+    }
+
+    .aura-pill.danger {
+      border-color: var(--red-border);
+      background: var(--red-bg);
+      color: #991b1b;
+    }
+
+    /* 캔버스 스테이지 */
+    .canvas-stage {
+      position: relative;
+      width: 100%;
+      height: 360px;
+      border-radius: 18px;
+      overflow: hidden;
+      border: 1px solid #cbd5e1;
+      background: radial-gradient(circle at 50% 35%, #eef7fa 0%, #dce8ef 65%, #cbd8e2 100%);
+      touch-action: pan-y;
+      cursor: grab;
+      user-select: none;
+    }
+
+    .canvas-stage:active {
+      cursor: grabbing;
+    }
+
+    .canvas-stage.mode-2036 {
+      background: radial-gradient(circle at 50% 35%, #fef6e4 0%, #f3e2c8 65%, #e2ccb0 100%);
+    }
+
+    #twinCanvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    .canvas-hint {
+      position: absolute;
+      left: 10px;
+      bottom: 10px;
+      background: rgba(15, 23, 42, 0.72);
+      color: #ffffff;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 5px 10px;
+      border-radius: 999px;
+      pointer-events: none;
+    }
+
+    .canvas-year-tag {
+      position: absolute;
+      right: 10px;
+      top: 10px;
+      background: rgba(255, 255, 255, 0.9);
+      color: var(--primary);
+      border: 1px solid rgba(15, 92, 110, 0.2);
+      font-size: 11.5px;
+      font-weight: 800;
+      padding: 4px 10px;
+      border-radius: 999px;
+      pointer-events: none;
+    }
+
+    .viewer-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 10px;
+    }
+
+    .mini-btn {
+      flex: 1 1 auto;
+      padding: 8px 10px;
+      border-radius: 11px;
+      border: 1px solid var(--border);
+      background: var(--surface-alt);
+      color: var(--text);
+      font-size: 11.5px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.18s ease;
+    }
+
+    .mini-btn:hover {
+      border-color: var(--primary);
+      background: var(--primary-soft);
+      color: var(--primary);
+    }
+
+    .mini-btn.accent {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #ffffff;
+    }
+
+    .mini-btn.accent:hover {
+      background: var(--primary-dark);
+    }
+
+    /* 실시간 지표 요약 그리드 */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .kpi-box {
+      padding: 10px;
+      border-radius: 13px;
+      background: var(--surface-alt);
+      border: 1px solid var(--border);
+      text-align: center;
+    }
+
+    .kpi-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 700;
+    }
+
+    .kpi-value {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--text);
+      margin-top: 2px;
+    }
+
+    .kpi-sub {
+      font-size: 10.5px;
+      color: var(--primary);
+      font-weight: 700;
+      margin-top: 2px;
+    }
+
+    .risk-bar-wrap {
+      margin-top: 12px;
+      padding: 11px 12px;
+      border-radius: 13px;
+      background: var(--primary-soft);
+      border: 1px solid #cce6ec;
+    }
+
+    .risk-bar-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      font-weight: 800;
+      margin-bottom: 6px;
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 8px;
+      background: #dbe7ee;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      border-radius: 999px;
+      background: var(--green);
+      transition: width 0.3s ease, background-color 0.3s ease;
+    }
+
+    /* 우측 단계 콘솔 카드 */
+    .console-card {
+      padding: 22px;
+      min-height: 620px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .screen-panel {
+      display: none;
+    }
+
+    .screen-panel.active {
+      display: block;
+      animation: fadeIn 0.22s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .section-head {
+      border-bottom: 1px solid #e2e8f0;
+      padding-bottom: 12px;
+      margin-bottom: 16px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .step-kicker {
+      font-size: 11.5px;
+      font-weight: 800;
+      color: var(--primary);
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+    }
+
+    .section-title {
+      margin: 4px 0 0 0;
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--text);
+      letter-spacing: -0.02em;
+    }
+
+    .section-desc {
+      margin: 5px 0 0 0;
+      font-size: 13px;
+      color: var(--text-sub);
+    }
+
+    /* 내부 패널 & 그리드 */
+    .box {
+      padding: 15px;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      margin-bottom: 14px;
+    }
+
+    .box-teal {
+      background: var(--primary-soft);
+      border-color: #bfe0e8;
+    }
+
+    .box-amber {
+      background: var(--amber-bg);
+      border-color: var(--amber-border);
+    }
+
+    .box-slate {
+      background: var(--surface-alt);
+      border-color: var(--border);
+    }
+
+    .box-header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .box-title {
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--primary);
+      margin: 0;
+    }
+
+    .box-title.dark {
+      color: var(--text);
+    }
+
+    .box-title.amber {
+      color: #92400e;
+    }
+
+    .pill-tag {
+      font-size: 11px;
+      font-weight: 800;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: #ffffff;
+      border: 1px solid #bfe0e8;
+      color: var(--primary);
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    /* 페르소나 프리셋 버튼 */
+    .persona-btn {
+      padding: 11px 12px;
+      border-radius: 14px;
+      border: 1.5px solid var(--border);
+      background: #ffffff;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.18s ease;
+    }
+
+    .persona-btn:hover {
+      border-color: var(--primary);
+      background: var(--primary-soft);
+    }
+
+    .persona-btn.active {
+      border-color: var(--primary);
+      background: var(--primary-light);
+      box-shadow: 0 2px 10px rgba(15, 92, 110, 0.12);
+    }
+
+    .persona-name {
+      font-size: 12.5px;
+      font-weight: 800;
+      color: var(--text);
+    }
+
+    .persona-btn.active .persona-name {
+      color: var(--primary);
+    }
+
+    .persona-meta {
+      font-size: 11px;
+      color: var(--text-sub);
+      margin-top: 3px;
+    }
+
+    /* 폼 요소 */
+    .field-label {
+      display: block;
+      font-size: 11.5px;
+      font-weight: 800;
+      color: var(--text-sub);
+      margin-bottom: 5px;
+    }
+
+    .select-input, .text-input {
+      width: 100%;
+      padding: 9px 11px;
+      border-radius: 11px;
+      border: 1px solid #cbd5e1;
+      background: #ffffff;
+      color: var(--text);
+      font-size: 13px;
+      font-weight: 600;
+      outline: none;
+      transition: border-color 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    .select-input:focus, .text-input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(15, 92, 110, 0.12);
+    }
+
+    .col-span-2 {
+      grid-column: span 2;
+    }
+
+    /* 커스텀 슬라이더 */
+    .slider-card {
+      padding: 13px 14px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: #ffffff;
+    }
+
+    .slider-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12.5px;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .slider-val {
+      color: var(--primary);
+    }
+
+    .bio-slider {
+      width: 100%;
+      height: 7px;
+      border-radius: 999px;
+      background: #dce6ee;
+      outline: none;
+      appearance: none;
+      -webkit-appearance: none;
+      cursor: pointer;
+    }
+
+    .bio-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--primary);
+      border: 2.5px solid #ffffff;
+      box-shadow: 0 2px 6px rgba(15, 92, 110, 0.35);
+      cursor: pointer;
+    }
+
+    .bio-slider::-moz-range-thumb {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--primary);
+      border: 2.5px solid #ffffff;
+      box-shadow: 0 2px 6px rgba(15, 92, 110, 0.35);
+      cursor: pointer;
+    }
+
+    .slider-scale {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 6px;
+    }
+
+    /* 질병 칩 & 검색 리스트 */
+    .chip-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+    }
+
+    .disease-chip {
+      padding: 6px 11px;
+      border-radius: 999px;
+      border: 1px solid #cbd5e1;
+      background: #ffffff;
+      color: var(--text);
+      font-size: 11.5px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.16s ease;
+    }
+
+    .disease-chip:hover {
+      border-color: var(--primary);
+      background: var(--primary-soft);
+    }
+
+    .disease-chip.selected {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #ffffff;
+    }
+
+    .selected-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 10px;
+      border-radius: 999px;
+      background: var(--primary);
+      color: #ffffff;
+      font-size: 11.5px;
+      font-weight: 700;
+    }
+
+    .selected-tag button {
+      border: none;
+      background: rgba(255, 255, 255, 0.22);
+      color: #ffffff;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      font-size: 11px;
+      font-weight: 800;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+    }
+
+    .disease-list {
+      max-height: 165px;
+      overflow-y: auto;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: #ffffff;
+    }
+
+    .disease-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 9px 12px;
+      border-bottom: 1px solid #f1f5f9;
+      font-size: 12.5px;
+    }
+
+    .disease-row:last-child {
+      border-bottom: none;
+    }
+
+    .disease-row-meta {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .row-action-btn {
+      padding: 5px 11px;
+      border-radius: 9px;
+      border: 1px solid var(--primary);
+      background: #ffffff;
+      color: var(--primary);
+      font-size: 11.5px;
+      font-weight: 800;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .row-action-btn.added {
+      background: var(--primary);
+      color: #ffffff;
+    }
+
+    /* 액션 버튼 (3단계 코칭) */
+    .coach-btn {
+      padding: 14px;
+      border-radius: 15px;
+      border: 1.5px solid var(--border);
+      background: #ffffff;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.18s ease;
+    }
+
+    .coach-btn:hover {
+      border-color: var(--primary);
+      background: var(--primary-soft);
+      transform: translateY(-1px);
+    }
+
+    .coach-btn.highlight {
+      border-color: var(--primary);
+      background: var(--primary-soft);
+    }
+
+    .coach-btn-title {
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--primary);
+    }
+
+    .coach-btn-sub {
+      font-size: 11.5px;
+      color: var(--text-sub);
+      margin-top: 4px;
+    }
+
+    /* 질병 해결책/미조치 리포트 카드 */
+    .guide-item {
+      padding: 12px 13px;
+      border-radius: 13px;
+      background: #ffffff;
+      border: 1px solid #f2d59b;
+      margin-bottom: 9px;
+    }
+
+    .guide-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .guide-head {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 6px;
+    }
+
+    .guide-name {
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--text);
+    }
+
+    .guide-badge {
+      font-size: 11px;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: var(--red-bg);
+      color: #991b1b;
+      border: 1px solid var(--red-border);
+    }
+
+    .guide-line {
+      margin: 4px 0 0 0;
+      font-size: 12.2px;
+      color: var(--text-sub);
+      line-height: 1.5;
+    }
+
+    .guide-line strong.solve {
+      color: #0f5c6e;
+    }
+
+    .guide-line strong.warn {
+      color: #b91c1c;
+    }
+
+    /* 하단 스텝 이동 바 */
+    .footer-nav {
+      margin-top: 18px;
+      padding-top: 14px;
+      border-top: 1px solid #e2e8f0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .btn {
+      padding: 11px 18px;
+      border-radius: 13px;
+      font-size: 13px;
+      font-weight: 800;
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: all 0.18s ease;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(15, 92, 110, 0.22);
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+    }
+
+    .btn-secondary {
+      background: #ffffff;
+      color: var(--text);
+      border-color: #cbd5e1;
+    }
+
+    .btn-secondary:hover {
+      background: var(--surface-alt);
+      border-color: var(--primary);
+    }
+
+    .btn-sm {
+      padding: 7px 12px;
+      border-radius: 10px;
+      font-size: 12px;
+    }
+
+    .btn-dark {
+      background: #0f172a;
+      color: #ffffff;
+    }
+
+    .btn-dark:hover {
+      background: #1e293b;
+    }
+
+    /* 카운터 버튼 */
+    .counter-group {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .counter-btn {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      border: 1px solid #cbd5e1;
+      background: #f8fafc;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .counter-btn:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    /* 히스토리 & 리스트 */
+    .history-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+
+    .history-item {
+      padding: 9px 11px;
+      border-radius: 11px;
+      background: var(--surface-alt);
+      border: 1px solid var(--border);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+    }
+
+    /* 경구 푸터 */
+    .app-footer {
+      max-width: 1280px;
+      margin: 0 auto 28px auto;
+      padding: 0 18px;
+    }
+
+    .tagline-box {
+      padding: 16px 20px;
+      border-radius: 18px;
+      background: linear-gradient(135deg, #0f5c6e 0%, #146f84 100%);
+      color: #ffffff;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .tagline-quote {
+      font-size: 14px;
+      font-weight: 800;
+      margin: 0;
+    }
+
+    .tagline-meta {
+      font-size: 11.5px;
+      opacity: 0.9;
+      margin: 4px 0 0 0;
+    }
+
+    /* 토스트 알림 (alert 대체) */
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 24px;
+      transform: translateX(-50%) translateY(20px);
+      background: #0f172a;
+      color: #ffffff;
+      padding: 12px 18px;
+      border-radius: 14px;
+      font-size: 13px;
+      font-weight: 700;
+      box-shadow: 0 12px 30px rgba(15, 23, 42, 0.35);
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.25s ease;
+      z-index: 100;
+      max-width: 90vw;
+      text-align: center;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .flex-row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .flex-wrap {
+      flex-wrap: wrap;
+    }
+
+    .flex-1 {
+      flex: 1 1 0;
+      min-width: 0;
+    }
+
+    .text-sm {
+      font-size: 12.5px;
+      color: var(--text-sub);
+    }
+
+    .text-xs {
+      font-size: 11.5px;
+      color: var(--text-muted);
+    }
+
+    .score-big {
+      font-size: 26px;
+      font-weight: 800;
+      margin: 4px 0;
+    }
+
+    /* 반응형 브레이크포인트 */
+    @media (max-width: 980px) {
+      .main-grid {
+        grid-template-columns: 1fr;
+      }
+      .viewer-card {
+        position: static;
+      }
+      .canvas-stage {
+        height: 320px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .header-inner {
+        padding: 10px 14px;
+      }
+      .step-nav-wrap, .main-grid, .app-footer {
+        padding-left: 12px;
+        padding-right: 12px;
+      }
+      .step-nav {
+        gap: 5px;
+      }
+      .step-tab {
+        padding: 8px 4px;
+      }
+      .step-name {
+        font-size: 11.5px;
+      }
+      .grid-3, .grid-2 {
+        grid-template-columns: 1fr;
+      }
+      .col-span-2 {
+        grid-column: auto;
+      }
+      .console-card {
+        padding: 16px;
+        min-height: auto;
+      }
+      .flex-row.stack-mobile {
+        flex-direction: column;
+        align-items: stretch;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- ===================================================================
+       상단 헤더: 앱 타이틀, 오프라인 구동 배지, 2026 ↔ 2036 타임머신 전환
+       =================================================================== -->
+  <header class="app-header">
+    <div class="header-inner">
+      <div class="brand">
+        <div class="brand-mark">BT</div>
+        <div>
+          <h1 class="brand-title">바이오 트윈 (Bio-Twin)</h1>
+          <p class="brand-sub">2036 예방 헬스케어 휴먼 디지털 트윈 · 20232818 전시헌</p>
+        </div>
+      </div>
+
+      <div class="header-controls">
+        <span class="offline-pill" title="인터넷 연결 없이 단일 HTML 파일로 완전 작동합니다.">
+          <span class="offline-dot"></span>
+          100% 오프라인 단독 실행
+        </span>
+
+        <div class="year-switch" role="group" aria-label="연도 시뮬레이션 전환">
+          <button id="btnYear2026" type="button" class="year-btn active">2026 현재</button>
+          <button id="btnYear2036" type="button" class="year-btn">2036 미래 예측</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===================================================================
+       5단계 사용자 여정 네비게이션 (시작 → 입력 → AI 도움 → 결과 → 다른 앱들)
+       =================================================================== -->
+  <nav class="step-nav-wrap" aria-label="앱 5단계 흐름">
+    <div class="step-nav">
+      <button type="button" class="step-tab active" data-step="1">
+        <span class="step-num">STEP 1</span>
+        <span class="step-name">시작·프로필</span>
+      </button>
+      <button type="button" class="step-tab" data-step="2">
+        <span class="step-num">STEP 2</span>
+        <span class="step-name">입력·질병</span>
+      </button>
+      <button type="button" class="step-tab" data-step="3">
+        <span class="step-num">STEP 3</span>
+        <span class="step-name">AI 도움</span>
+      </button>
+      <button type="button" class="step-tab" data-step="4">
+        <span class="step-num">STEP 4</span>
+        <span class="step-name">2036 결과</span>
+      </button>
+      <button type="button" class="step-tab" data-step="5">
+        <span class="step-num">STEP 5</span>
+        <span class="step-name">다른 앱·비전</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ===================================================================
+       메인 2단 대시보드 (좌: 실시간 휴먼 디지털 트윈 / 우: 5단계 콘솔)
+       =================================================================== -->
+  <main class="main-grid">
+    <!-- 좌측: 실시간 휴먼 디지털 트윈 뷰어 -->
+    <aside class="card viewer-card">
+      <div class="viewer-top">
+        <div>
+          <span class="viewer-badge">HUMAN DIGITAL TWIN</span>
+          <h2 id="viewerPersonaTitle" class="viewer-persona">22세 여성 · 대학생 · 대학원생</h2>
+        </div>
+        <span id="auraBadge" class="aura-pill">오라: 양호 (초록)</span>
+      </div>
+
+      <!-- 부드러운 인체 캔버스 뷰어 -->
+      <div id="canvasStage" class="canvas-stage">
+        <canvas id="twinCanvas" aria-label="실시간 휴먼 디지털 트윈 아바타"></canvas>
+        <span id="canvasYearTag" class="canvas-year-tag">2026 현재 실시간 동기화</span>
+        <span class="canvas-hint">드래그·터치로 좌우 회전</span>
+      </div>
+
+      <!-- 아바타 제어 툴바 -->
+      <div class="viewer-toolbar">
+        <button id="btnViewFront" type="button" class="mini-btn">정면 보기</button>
+        <button id="btnViewSide" type="button" class="mini-btn">측면(거북목) 보기</button>
+        <button id="btnAvatarStyle" type="button" class="mini-btn">스타일 전환</button>
+        <button id="btnQuickStretch" type="button" class="mini-btn accent">5분 스트레칭 체험</button>
+      </div>
+
+      <!-- 핵심 3종 KPI -->
+      <div class="kpi-grid">
+        <div class="kpi-box">
+          <div class="kpi-label">현재 트윈 점수</div>
+          <div id="kpiCurrentScore" class="kpi-value">74점</div>
+          <div id="kpiAvgDiff" class="kpi-sub">평균 대비 -1점</div>
+        </div>
+        <div class="kpi-box">
+          <div class="kpi-label">2036년 예측</div>
+          <div id="kpiFutureScore" class="kpi-value">61점</div>
+          <div id="kpiRelativePct" class="kpi-sub">평균 대비 99%</div>
+        </div>
+        <div class="kpi-box">
+          <div class="kpi-label">거북목·질병</div>
+          <div id="kpiNeckAngle" class="kpi-value">16°</div>
+          <div id="kpiDiseaseCount" class="kpi-sub">등록 질병 0건</div>
+        </div>
+      </div>
+
+      <!-- 2036 누적 위험도 프로그레스 바 -->
+      <div class="risk-bar-wrap">
+        <div class="risk-bar-head">
+          <span>2036 근골격·만성피로 누적 위험도</span>
+          <span id="riskPercentLabel" style="color:#0f5c6e;">39% · 습관 교정 권장</span>
+        </div>
+        <div class="progress-track">
+          <div id="riskProgressBar" class="progress-fill" style="width: 39%;"></div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- 우측: 5단계 인터랙티브 콘솔 -->
+    <section class="card console-card">
+      <div>
+        <!-- ===============================================================
+             STEP 1: 시작 · 나이/성별/키/몸무게/직업/질병 직접 선택
+             =============================================================== -->
+        <div id="screen-1" class="screen-panel active">
+          <div class="section-head">
+            <div>
+              <span class="step-kicker">Step 1 of 5 · 시작 &amp; 내 정보 직접 선택</span>
+              <h2 class="section-title">나이·성별·키·몸무게·직업·질병 선택</h2>
+              <p class="section-desc">
+                내 신체·직업·질병 정보를 선택하면 <strong>부드러운 휴먼 디지털 트윈 체형</strong>과 <strong>동연령·성별 평균 대비 점수</strong>에 즉시 반영됩니다.
+              </p>
+            </div>
+          </div>
+
+          <!-- 빠른 예시 프리셋 -->
+          <div class="box box-slate">
+            <div class="box-header">
+              <h3 class="box-title dark">빠른 예시 프로필 불러오기 (클릭 시 아래 항목 자동 반영)</h3>
+            </div>
+            <div class="grid-3">
+              <button type="button" class="persona-btn active" data-persona="jimin">
+                <div class="persona-name">박지민 (22세 · 대학생)</div>
+                <div class="persona-meta">여성 · 168cm · 58kg</div>
+              </button>
+              <button type="button" class="persona-btn" data-persona="seojun">
+                <div class="persona-name">익명2 (25세 · 취준생)</div>
+                <div class="persona-meta">남성 · 176cm · 74kg</div>
+              </button>
+              <button type="button" class="persona-btn" data-persona="minji">
+                <div class="persona-name">익명3 (29세 · 사무직)</div>
+                <div class="persona-meta">여성 · 165cm · 56kg</div>
+              </button>
+            </div>
+          </div>
+
+          <!-- 5대 기본 정보 드롭다운 선택 -->
+          <div class="box box-teal">
+            <div class="box-header">
+              <h3 class="box-title">내 신체 · 직업 정보 직접 선택</h3>
+              <span id="avgComparisonBadge" class="pill-tag">동연령·성별 평균 대비: -1점 (99%)</span>
+            </div>
+
+            <div class="grid-3">
+              <div>
+                <label class="field-label" for="inputAge">나이 선택</label>
+                <select id="inputAge" class="select-input"></select>
+              </div>
+              <div>
+                <label class="field-label" for="inputGender">성별 선택</label>
+                <select id="inputGender" class="select-input">
+                  <option value="female" selected>여성</option>
+                  <option value="male">남성</option>
+                </select>
+              </div>
+              <div>
+                <label class="field-label" for="inputHeight">키 선택 (cm)</label>
+                <select id="inputHeight" class="select-input"></select>
+              </div>
+              <div>
+                <label class="field-label" for="inputWeight">몸무게 선택 (kg)</label>
+                <select id="inputWeight" class="select-input"></select>
+              </div>
+              <div class="col-span-2">
+                <label class="field-label" for="inputJob">직업 선택</label>
+                <select id="inputJob" class="select-input"></select>
+              </div>
+            </div>
+
+            <div id="customJobWrap" class="hidden" style="margin-top:10px;">
+              <label class="field-label" for="inputCustomJob">직업명 직접 입력</label>
+              <input id="inputCustomJob" type="text" class="text-input" placeholder="예: 바리스타, 연구원, 자영업, 영상편집자..." />
+            </div>
+
+            <p id="bodyStatsSummary" class="text-xs" style="margin:10px 0 0 0; color:#334155;">
+              BMI 20.5 · 기준 체중 대비 +0.0kg · 평균 대비 점수 산출 완료
+            </p>
+          </div>
+
+          <!-- 대표 질병 빠른 선택 -->
+          <div class="box">
+            <div class="box-header">
+              <h3 class="box-title dark">보유·관심 질병 빠른 선택 (복수 선택 가능)</h3>
+              <button id="goToDiseaseCatalogBtn" type="button" class="btn btn-secondary btn-sm">
+                10,000개 질병 검색·직접 입력 →
+              </button>
+            </div>
+            <div id="quickDiseaseChips" class="chip-wrap"></div>
+          </div>
+
+          <!-- 온디바이스 개인정보 약속 동의 -->
+          <div class="box box-slate" style="margin-bottom:0;">
+            <label style="display:flex; align-items:flex-start; gap:10px; cursor:pointer;">
+              <input id="privacyAgreeCheck" type="checkbox" checked style="margin-top:3px; width:16px; height:16px; accent-color:#0f5c6e;" />
+              <span class="text-xs" style="color:#334155; line-height:1.55;">
+                <strong>[온디바이스 약속 동의]</strong> 모든 자세·신체·질병 데이터는 인터넷 전송 없이 내 기기 내부(On-Device)에서만 연산되며, 본 앱은 의학적 진단이 아닌 예방·교육용 디지털 트윈 시뮬레이션임을 확인했습니다.
+              </span>
+            </label>
+          </div>
+        </div>
+
+        <!-- ===============================================================
+             STEP 2: 입력 · 자세/습관 동기화 + 10,000개 질병 카탈로그
+             =============================================================== -->
+        <div id="screen-2" class="screen-panel">
+          <div class="section-head">
+            <div>
+              <span class="step-kicker">Step 2 of 5 · 입력 및 실시간 동기화</span>
+              <h2 class="section-title">자세·생활 습관 &amp; 10,000개 질병 등록</h2>
+            </div>
+            <button id="webcamToggleBtn" type="button" class="btn btn-dark btn-sm">
+              카메라 자세 확인 켜기
+            </button>
+          </div>
+
+          <!-- 현재 프로필 요약 바 -->
+          <div class="box box-slate" style="padding:11px 14px; display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:8px;">
+            <span id="step2ProfileSummary" class="text-sm" style="font-weight:700; color:#0f172a;">
+              22세 · 여성 · 168cm · 58kg · 대학생 · 질병 0건
+            </span>
+            <button id="goToProfileStepBtn" type="button" class="btn btn-secondary btn-sm">프로필 변경</button>
+          </div>
+
+          <!-- 웹캠(오프라인 On-Device 미리보기 / 미연결 시 시뮬레이션 안내) -->
+          <div id="webcamBox" class="box box-teal" style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:12px;">
+            <div class="flex-1">
+              <div class="box-title" style="margin-bottom:4px;">실시간 목·어깨 자세 센서 (On-Device 구조)</div>
+              <p id="webcamStatusDesc" class="text-xs" style="margin:0; color:#334155;">
+                인터넷 없이도 아래 ‘거북목 각도’ 슬라이더로 아바타의 경추·척추 기울기를 실시간 동기화할 수 있으며, 기기 카메라를 켜 내 자세를 직접 거울처럼 확인할 수 있습니다.
+              </p>
+            </div>
+            <video id="cameraPreview" autoplay playsinline muted class="hidden" style="width:136px; height:96px; border-radius:12px; object-fit:cover; border:2px solid #0f5c6e; background:#000;"></video>
+          </div>
+
+          <!-- 4종 핵심 습관 입력 슬라이더 -->
+          <div class="grid-2" style="margin-bottom:14px;">
+            <div class="slider-card">
+              <div class="slider-head">
+                <span>거북목(목 숙임) 각도</span>
+                <span id="valNeckAngle" class="slider-val">16°</span>
+              </div>
+              <input id="inputNeckAngle" type="range" min="0" max="45" step="1" value="16" class="bio-slider" />
+              <div class="slider-scale">
+                <span>0° 바른자세</span>
+                <span>15° 주의</span>
+                <span>35°+ 고위험</span>
+              </div>
+            </div>
+
+            <div class="slider-card">
+              <div class="slider-head">
+                <span>어제 수면 시간</span>
+                <span id="valSleepHours" class="slider-val">6.0시간</span>
+              </div>
+              <input id="inputSleepHours" type="range" min="3" max="11" step="0.5" value="6" class="bio-slider" />
+              <div class="slider-scale">
+                <span>3시간</span>
+                <span>7~8시간 권장</span>
+                <span>11시간</span>
+              </div>
+            </div>
+
+            <div class="slider-card">
+              <div class="slider-head">
+                <span>하루 앉아있는 시간 (좌식)</span>
+                <span id="valSittingHours" class="slider-val">8.0시간</span>
+              </div>
+              <input id="inputSittingHours" type="range" min="1" max="14" step="0.5" value="8" class="bio-slider" />
+              <div class="slider-scale">
+                <span>1시간</span>
+                <span>5시간 이하 권장</span>
+                <span>14시간</span>
+              </div>
+            </div>
+
+            <div class="slider-card">
+              <div class="slider-head">
+                <span>물 섭취량 &amp; 카페인</span>
+                <span id="valHydrationCaffeine" class="slider-val">물 4잔 · 카페인 2잔</span>
+              </div>
+              <input id="inputWaterCups" type="range" min="0" max="10" step="1" value="4" class="bio-slider" />
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-top:8px;">
+                <span class="text-xs">오늘 카페인 섭취(잔):</span>
+                <div class="counter-group">
+                  <button id="caffeineMinusBtn" type="button" class="counter-btn">-</button>
+                  <strong id="valCaffeineCups" style="font-size:13px; min-width:16px; text-align:center;">2</strong>
+                  <button id="caffeinePlusBtn" type="button" class="counter-btn">+</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 10,000개 질병 카탈로그 + 직접 입력 모듈 -->
+          <div class="box box-teal" style="margin-bottom:0;">
+            <div class="box-header">
+              <div>
+                <h3 class="box-title">10,000개 질병 카탈로그 검색 &amp; 직접 입력</h3>
+                <p class="text-xs" style="margin:2px 0 0 0;">
+                  오프라인 내장 10,000건 데이터베이스에서 선택하거나 원하는 질병을 직접 추가하세요.
+                </p>
+              </div>
+              <span id="diseaseCatalogCountBadge" class="pill-tag">카탈로그 10,000건 · 선택 0건</span>
+            </div>
+
+            <!-- 질병 직접 추가 -->
+            <div class="flex-row stack-mobile" style="margin-bottom:9px;">
+              <input id="customDiseaseInput" type="text" class="text-input flex-1" placeholder="질병명 직접 입력 (예: 원형탈모, 역류성식도염, 편두통...)" />
+              <select id="customDiseaseSeverity" class="select-input" style="width:auto; min-width:130px;">
+                <option value="경미">경미 (-3점)</option>
+                <option value="보통" selected>보통 (-6점)</option>
+                <option value="중점">중점 관리 (-10점)</option>
+              </select>
+              <button id="addCustomDiseaseBtn" type="button" class="btn btn-primary btn-sm" style="white-space:nowrap;">직접 추가</button>
+            </div>
+
+            <!-- 계통 필터 + 검색 -->
+            <div class="flex-row stack-mobile" style="margin-bottom:9px;">
+              <select id="diseaseSystemFilter" class="select-input" style="width:auto; min-width:155px;">
+                <option value="전체">전체 계통 보기 (10,000건)</option>
+              </select>
+              <input id="diseaseSearchInput" type="text" class="text-input flex-1" placeholder="질병명, 증상, 코드 검색 (예: 거북목, 디스크, 수면, DX-0500...)" />
+            </div>
+
+            <!-- 검색 결과 목록 -->
+            <div id="diseaseSearchResults" class="disease-list"></div>
+
+            <!-- 현재 반영 중인 질병 태그 -->
+            <div style="margin-top:11px;">
+              <div class="field-label" style="margin-bottom:6px;">내 트윈에 반영 중인 질병 목록</div>
+              <div id="selectedDiseasesContainer" class="chip-wrap"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===============================================================
+             STEP 3: AI 도움 · 직업/자세 종합 진단 & 즉시 교정 액션
+             =============================================================== -->
+        <div id="screen-3" class="screen-panel">
+          <div class="section-head">
+            <div>
+              <span class="step-kicker">Step 3 of 5 · AI 분석 및 맞춤 코칭</span>
+              <h2 class="section-title">AI 휴먼 디지털 트윈 진단 &amp; 즉각 교정</h2>
+              <p class="section-desc">
+                입력된 자세·수면·좌식·신체·직업·질병 데이터를 AI 규칙 엔진이 즉시 분석해 지금 실행할 교정 행동을 제안합니다.
+              </p>
+            </div>
+          </div>
+
+          <div class="box box-teal">
+            <div class="box-header">
+              <h3 class="box-title">AI 종합 상태 분석 (입력 → 분석 → 출력)</h3>
+              <span id="aiScorePill" class="pill-tag">2026 74점 → 2036 61점</span>
+            </div>
+            <p id="aiDiagnosisSummary" class="text-sm" style="margin:0; color:#1e293b; line-height:1.65;"></p>
+          </div>
+
+          <div class="box box-slate">
+            <h3 id="aiJobCoachingTitle" class="box-title dark" style="margin-bottom:6px;">직업 맞춤 AI 코칭</h3>
+            <p id="aiJobCoachingText" class="text-sm" style="margin:0; line-height:1.6;"></p>
+          </div>
+
+          <div class="box" style="margin-bottom:0;">
+            <div class="box-header">
+              <h3 class="box-title dark">지금 바로 실천해 아바타 회복 체험하기</h3>
+              <span class="text-xs">버튼을 누르면 왼쪽 아바타가 즉시 반응합니다</span>
+            </div>
+            <div class="grid-2">
+              <button type="button" class="coach-btn" data-action="chin-tuck">
+                <div class="coach-btn-title">1분 턱 당기기 (Chin Tuck)</div>
+                <div class="coach-btn-sub">목 숙임 각도 -6° 즉시 교정 · 경추 하중 완화</div>
+              </button>
+              <button type="button" class="coach-btn" data-action="shoulder-open">
+                <div class="coach-btn-title">2분 가슴 열기 &amp; 어깨 회전</div>
+                <div class="coach-btn-sub">좌식 피로 -1.5시간 효과 · 굽은 등 펴기</div>
+              </button>
+              <button type="button" class="coach-btn" data-action="water-glass">
+                <div class="coach-btn-title">물 한 잔 마시기</div>
+                <div class="coach-btn-sub">수분 섭취 +1잔 · 대사 및 피로 회복</div>
+              </button>
+              <button type="button" class="coach-btn highlight" data-action="full-reset">
+                <div class="coach-btn-title">5분 풀 스트레칭 리셋 체험</div>
+                <div class="coach-btn-sub">바른 자세(5°) 회복 + 2036 미래 점수 즉시 상승</div>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===============================================================
+             STEP 4: 결과 · 2026 vs 2036 리포트 & 질병 해결책/미조치 문제점
+             =============================================================== -->
+        <div id="screen-4" class="screen-panel">
+          <div class="section-head">
+            <div>
+              <span class="step-kicker">Step 4 of 5 · 결과 및 2036 미래 리포트</span>
+              <h2 class="section-title">2026 현재 vs 2036 예측 &amp; 질병 관리 가이드</h2>
+            </div>
+            <div class="flex-row flex-wrap">
+              <button id="saveSnapshotBtn" type="button" class="btn btn-primary btn-sm">오늘 트윈 기록 저장</button>
+              <button id="downloadReportBtn" type="button" class="btn btn-secondary btn-sm">리포트(.txt) 저장</button>
+            </div>
+          </div>
+
+          <div class="grid-2" style="margin-bottom:14px;">
+            <div class="box box-slate" style="margin-bottom:0;">
+              <div class="text-xs" style="font-weight:800;">2026년 현재 건강 점수</div>
+              <div id="report2026Score" class="score-big" style="color:#0f172a;">74점</div>
+              <p id="report2026Detail" class="text-xs" style="margin:0; color:#475569; line-height:1.55;"></p>
+            </div>
+
+            <div class="box box-amber" style="margin-bottom:0;">
+              <div class="text-xs" style="font-weight:800; color:#92400e;">2036년(10년 후) 습관 유지 시 예측</div>
+              <div id="report2036Score" class="score-big" style="color:#9a3412;">61점</div>
+              <p id="report2036Detail" class="text-xs" style="margin:0; color:#78350f; line-height:1.55;"></p>
+            </div>
+          </div>
+
+          <!-- 내 신체·직업 평균 대비 분석 -->
+          <div class="box box-teal">
+            <h3 class="box-title" style="margin-bottom:6px;">내 나이·성별·키·몸무게·직업 평균 대비 분석</h3>
+            <p id="reportProfileAvgSummary" class="text-sm" style="margin:0; color:#1e293b; line-height:1.6;"></p>
+          </div>
+
+          <!-- 질병별 해결책 & 미조치 시 문제점 -->
+          <div class="box box-amber" style="margin-bottom:0;">
+            <div class="box-header">
+              <h3 class="box-title amber">등록 질병별 맞춤 해결책 &amp; 미조치 시 문제점</h3>
+              <button id="goAddDiseaseFromResult" type="button" class="btn btn-secondary btn-sm">질병 추가/수정</button>
+            </div>
+            <div id="reportDiseaseGuide"></div>
+          </div>
+        </div>
+
+        <!-- ===============================================================
+             STEP 5: 다른 앱들 연동 · 주간 기록 · 미래 시나리오 · 기획 근거
+             =============================================================== -->
+        <div id="screen-5" class="screen-panel">
+          <div class="section-head">
+            <div>
+              <span class="step-kicker">Step 5 of 5 · 다른 앱들 확장 &amp; 2036 비전</span>
+              <h2 class="section-title">외부 앱 연동 · 로컬 기록 · 미래 시나리오</h2>
+            </div>
+          </div>
+
+          <!-- 다른 앱들 연동 -->
+          <div class="box box-teal">
+            <h3 class="box-title" style="margin-bottom:10px;">다른 앱과 연결하기 (오프라인 내보내기 지원)</h3>
+            <div class="grid-3">
+              <div class="box" style="margin-bottom:0; padding:12px;">
+                <div style="font-size:12.5px; font-weight:800; color:#0f172a;">캘린더 스트레칭 알림</div>
+                <p class="text-xs" style="margin:4px 0 10px 0;">매일 오후 3시 5분 자세 리셋 일정(.ics)을 내 캘린더에 바로 등록</p>
+                <button id="downloadCalendarBtn" type="button" class="btn btn-primary btn-sm" style="width:100%;">일정 파일(.ics) 저장</button>
+              </div>
+              <div class="box" style="margin-bottom:0; padding:12px;">
+                <div style="font-size:12.5px; font-weight:800; color:#0f172a;">워치·건강 앱 연동</div>
+                <p class="text-xs" style="margin:4px 0 10px 0;">스마트워치·링 수면·심박 데이터 자동 동기화 (2029 확장 로드맵)</p>
+                <button id="simWearableSyncBtn" type="button" class="btn btn-secondary btn-sm" style="width:100%;">워치 동기화 체험</button>
+              </div>
+              <div class="box" style="margin-bottom:0; padding:12px;">
+                <div style="font-size:12.5px; font-weight:800; color:#0f172a;">원격 가족·주치의 돌봄</div>
+                <p class="text-xs" style="margin:4px 0 10px 0;">2036년 초고령사회 예방 의료용 트윈 요약 데이터(.json) 내보내기</p>
+                <button id="exportJsonBtn" type="button" class="btn btn-secondary btn-sm" style="width:100%;">트윈 데이터(.json) 저장</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- 주간 로컬 기록 히스토리 -->
+          <div class="box">
+            <div class="box-header">
+              <h3 class="box-title dark">내 기기 저장 트윈 변화 기록 (<span id="savedCountLabel">0건</span>)</h3>
+              <button id="clearHistoryBtn" type="button" class="btn btn-secondary btn-sm">기록 비우기</button>
+            </div>
+            <ul id="historyList" class="history-list"></ul>
+          </div>
+
+          <!-- 미래 시나리오 3단계 & 사전 조사 근거 -->
+          <div class="grid-2" style="margin-bottom:0;">
+            <div class="box box-slate" style="margin-bottom:0;">
+              <h3 class="box-title" style="margin-bottom:8px;">미래 시나리오 3단계</h3>
+              <p class="text-xs" style="margin:0 0 6px 0; color:#334155;"><strong>1년 후 (2027):</strong> 대학생·직장인이 웹과 노트북만으로 매일 자세를 점검하는 셀프 코칭 도구 정착.</p>
+              <p class="text-xs" style="margin:0 0 6px 0; color:#334155;"><strong>3년 후 (2029):</strong> 스마트워치·스마트링·경량 AR 글래스 자동 연동으로 무입력 실시간 동기화.</p>
+              <p class="text-xs" style="margin:0; color:#334155;"><strong>2036년 (10년 후):</strong> 초고령사회 예방 의료 표준 플랫폼 — 가족·주치의 원격 낙상·만성질환 예측 및 복약 시뮬레이션.</p>
+            </div>
+            <div class="box box-slate" style="margin-bottom:0;">
+              <h3 class="box-title" style="margin-bottom:8px;">기획 근거 및 윤리 약속</h3>
+              <p class="text-xs" style="margin:0 0 6px 0; color:#334155;"><strong>공공 통계:</strong> 심평원(2024) 거북목 진료 환자 254만 2,076명(10년 새 +35%).</p>
+              <p class="text-xs" style="margin:0 0 6px 0; color:#334155;"><strong>약속:</strong> 개인정보 온디바이스 처리 · 오픈소스/통계 출처 준수 · 비의료 시뮬레이션 고지.</p>
+              <p class="text-xs" style="margin:0; color:#334155;"><strong>제작 · 활용 AI:</strong> 20232818 전시헌 · 제미나이(Gemini)</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 하단 단계 이동 버튼 -->
+      <div class="footer-nav">
+        <button id="prevStepBtn" type="button" class="btn btn-secondary">← 이전 단계</button>
+        <span id="stepIndicatorText" class="text-xs" style="font-weight:800;">1 / 5 단계</span>
+        <button id="nextStepBtn" type="button" class="btn btn-primary">다음 단계 →</button>
+      </div>
+    </section>
+  </main>
+
+  <!-- 하단 홍보 한 줄(경구) 배너 -->
+  <footer class="app-footer">
+    <div class="tagline-box">
+      <div>
+        <p class="tagline-quote">“오늘 15도 숙인 목이 2036년의 당신을 만듭니다 — 미래의 나를 지금 거울처럼 만나다, 바이오 트윈.”</p>
+        <p class="tagline-meta">교양 「메타버스를 위한 디지털 트윈」 · 20232818 전시헌 · 단일 HTML 파일 오프라인 공유·실행 가능</p>
+      </div>
+      <button id="footerQuickPrintBtn" type="button" class="btn btn-secondary btn-sm">화면 인쇄 / PDF 저장</button>
+    </div>
+  </footer>
+
+  <!-- 커스텀 토스트 메시지 (alert 미사용) -->
+  <div id="toastBox" class="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    /* =======================================================================
+       바이오 트윈 (Bio-Twin) — 100% 오프라인 순수 JavaScript 엔진
+       - 외부 API / 외부 CDN / 서버 통신 ZERO
+       - 부드러운 휴먼 아바타 실시간 모션(호흡·눈 깜빡임·관절 보간·체형 반영)
+       - 10,000개 질병 오프라인 카탈로그 + 사용자 직접 추가 + 해결책/미조치 가이드
+       ======================================================================= */
+    (function () {
+      'use strict';
+
+      // ---------------------------------------------------------------------
+      // 1. 10,000개 질병 오프라인 카탈로그 생성기 (DX-00001 ~ DX-10000)
+      // ---------------------------------------------------------------------
+      const BODY_SYSTEMS = [
+        '근골격·척추계',
+        '신경·수면계',
+        '순환·심혈관계',
+        '대사·내분비계',
+        '소화기계',
+        '호흡기계',
+        '안과·시각계',
+        '피부·면역계',
+        '정신·스트레스계',
+        '이비인후·구강계'
+      ];
+
+      // 계통별 맞춤 해결책 및 미조치 시 문제점 템플릿
+      const SYSTEM_GUIDES = {
+        '근골격·척추계': {
+          solution: '50분 좌식마다 5분 기립, 1분 턱 당기기(Chin Tuck), 모니터 눈높이 정렬 및 코어·등 근력 보강 루틴을 매일 실천하세요.',
+          untreated: '경추·요추 디스크 압력이 누적되어 만성 신경 압박, 팔·다리 저림, 체형 영구 변형 및 2036년 보행·낙상 위험이 크게 높아집니다.'
+        },
+        '신경·수면계': {
+          solution: '취침 1시간 전 스마트폰·블루라이트를 차단하고 기상 시각을 일정하게 고정하며, 오후 2시 이후 카페인 섭취를 제한하세요.',
+          untreated: '깊은 수면 부족이 만성화되어 편두통·어지럼증·집중력 저하가 심화되고 자율신경 불균형 및 인지 피로가 누적됩니다.'
+        },
+        '순환·심혈관계': {
+          solution: '주 5회 30분 이상 빠른 걷기 등 유산소 운동과 저염 식단, 충분한 수분 섭취로 혈관 탄력을 관리하세요.',
+          untreated: '혈압·혈류 부담이 누적되어 10년 뒤 동맥경화, 심혈관 합병증, 만성 부종 및 피로 위험이 급증합니다.'
+        },
+        '대사·내분비계': {
+          solution: '식후 15분 가벼운 산책, 정제 탄수화물·당류 절제, 규칙적 수면과 표준 체중(BMI) 유지가 핵심입니다.',
+          untreated: '인슐린 저항성과 대사 불균형이 심화되어 당뇨·지방간·만성 염증 등 전신 합병증으로 진행될 수 있습니다.'
+        },
+        '소화기계': {
+          solution: '식사 후 최소 2시간은 눕지 않고, 과식·야식·과도한 카페인을 줄이며 바른 상체 자세로 복부 압박을 낮추세요.',
+          untreated: '위식도 역류와 만성 위염이 반복되어 식도 점막 손상, 수면 방해 및 영양 흡수 저하로 이어집니다.'
+        },
+        '호흡기계': {
+          solution: '굽은 가슴을 펴는 흉추 스트레칭과 복식 호흡을 병행하고, 실내 습도(40~60%)와 공기 질을 꾸준히 관리하세요.',
+          untreated: '얕은 흉식 호흡과 기도 과민이 고착되어 만성 기침, 호흡 효율 저하, 수면 중 피로가 악화됩니다.'
+        },
+        '안과·시각계': {
+          solution: '20분 화면 시청마다 20초간 6m 먼 곳을 바라보는 20-20-20 규칙과 의식적인 눈 깜빡임, 실내 적정 조도를 유지하세요.',
+          untreated: '안구 표면 건조와 조절 근육 경직이 누적되어 만성 충혈, 시야 흐림, 두통 및 조기 노안 증상이 빨라집니다.'
+        },
+        '피부·면역계': {
+          solution: '7시간 이상 숙면, 하루 6~8잔 수분 보충, 피부 장벽 보습과 스트레스 완화를 통해 면역 균형을 지키세요.',
+          untreated: '만성 피부 염증과 장벽 손상이 반복되며 수면 질 저하와 2차 감염·색소 침착 위험이 커집니다.'
+        },
+        '정신·스트레스계': {
+          solution: '매일 10분 호흡 명상·야외 햇빛 산책, 디지털 디톡스 시간 확보 및 규칙적인 수면·운동 리듬을 구축하세요.',
+          untreated: '코르티솔 과다 분비가 장기화되어 번아웃, 불안·우울감 심화, 근육 긴장 및 수면 장애가 악순환됩니다.'
+        },
+        '이비인후·구강계': {
+          solution: '턱을 괴거나 이를 악무는 습관을 교정하고, 충분한 수분 섭취와 턱관절·목 주변 이완 마사지를 실천하세요.',
+          untreated: '턱관절 디스크 마모, 개구 장애, 이명 및 만성 편두통으로 확산되어 일상 식사·대화에 불편을 줍니다.'
+        },
+        '사용자 직접 입력': {
+          solution: '규칙적인 수면(7~8시간)·바른 자세·수분 보충을 기본으로 증상 일지를 기록하고, 전문 의료진과 맞춤 관리 계획을 세우세요.',
+          untreated: '초기 경미한 불편을 방치하면 2036년까지 만성화·합병증 위험이 커지고 일상 활동력과 회복 탄력성이 저하됩니다.'
+        }
+      };
+
+      // 대표 핵심 질병 20종 (1단계 빠른 선택 및 최상단 노출)
+      const FEATURED_DISEASES = [
+        {
+          id: 'DX-00001',
+          name: '거북목(일자목)증후군',
+          system: '근골격·척추계',
+          penalty: 7,
+          solution: '모니터 상단을 눈높이에 맞추고, 매시간 1분 턱 당기기(Chin Tuck)와 5분 가슴 열기 스트레칭을 실천하세요.',
+          untreated: '경추 C자 곡선이 역C자형으로 변형되어 만성 두통, 어깨 결림 및 경추 추간판 탈출증(목디스크)으로 악화됩니다.'
+        },
+        {
+          id: 'DX-00002',
+          name: '경추 추간판 탈출증 (목디스크)',
+          system: '근골격·척추계',
+          penalty: 10,
+          solution: '고개 숙임 각도를 10° 이내로 제한하고, 낮은 경추 지지 베개 사용과 전문 재활·도수 운동을 병행하세요.',
+          untreated: '신경근 압박이 심화되어 팔·손가락 저림, 근력 약화 및 장기 수술적 치료가 필요해질 수 있습니다.'
+        },
+        {
+          id: 'DX-00003',
+          name: '라운드 숄더 (굽은 어깨·등)',
+          system: '근골격·척추계',
+          penalty: 5,
+          solution: '흉근(가슴) 스트레칭과 등 상부(능형근) 강화 운동을 하루 10분씩 꾸준히 수행하세요.',
+          untreated: '어깨 충돌증후군, 호흡량 감소, 만성 등 통증과 2036년 상체 구부정 체형 고착으로 이어집니다.'
+        },
+        {
+          id: 'DX-00004',
+          name: '요추 디스크 · 만성 요통',
+          system: '근골격·척추계',
+          penalty: 9,
+          solution: '좌식 시간을 50분 단위로 끊어 일어나 걷고, 엉덩이를 의자 깊숙이 붙여 허리 곡선을 지지하며 코어를 강화하세요.',
+          untreated: '좌골신경통과 하지 방사통이 심화되어 장시간 착석·보행이 어려워지고 근감소증이 가속화됩니다.'
+        },
+        {
+          id: 'DX-00005',
+          name: '만성 불면증 · 수면 리듬 장애',
+          system: '신경·수면계',
+          penalty: 7,
+          solution: '취침 전 침대 스마트폰 사용을 중단하고 기상 시각 고정, 오전 햇빛 노출 및 오후 카페인 제한을 실천하세요.',
+          untreated: '만성 피로, 면역력 저하, 혈압 상승 및 기억력·집중력 감퇴가 10년간 누적됩니다.'
+        },
+        {
+          id: 'DX-00006',
+          name: '안구건조증 · 디지털 눈 피로',
+          system: '안과·시각계',
+          penalty: 4,
+          solution: '20-20-20 눈 휴식 규칙, 인공눈물 점안, 모니터 거리 50cm 이상 유지 및 실내 가습을 생활화하세요.',
+          untreated: '각막 미세 손상, 만성 충혈, 눈부심 및 두통 동반 시력 피로가 심화됩니다.'
+        },
+        {
+          id: 'DX-00007',
+          name: '손목터널증후군 (수근관증후군)',
+          system: '근골격·척추계',
+          penalty: 6,
+          solution: '키보드·마우스 손목 받침대를 수평으로 맞추고 1시간마다 손목 굴곡·신전 스트레칭을 실행하세요.',
+          untreated: '정중신경 압박이 진행되어 야간 손 저림과 물건을 놓치는 악력 저하가 발생합니다.'
+        },
+        {
+          id: 'DX-00008',
+          name: '역류성 식도염 · 기능성 소화불량',
+          system: '소화기계',
+          penalty: 6,
+          solution: '야식·과도한 카페인을 줄이고 식후 2시간 이내 눕지 않으며, 복부를 압박하는 구부정한 자세를 교정하세요.',
+          untreated: '만성 식도 염증, 목 이물감, 흉통 및 수면 장애가 반복 악화됩니다.'
+        },
+        {
+          id: 'DX-00009',
+          name: '긴장성 두통 · 편두통',
+          system: '신경·수면계',
+          penalty: 6,
+          solution: '뒷목(후두하근) 이완 스트레칭, 충분한 수분 섭취, 규칙적 수면 및 화면 밝기 조절을 유지하세요.',
+          untreated: '두통 빈도가 주 3회 이상으로 만성화되고 진통제 의존 및 일상 집중력 저하가 커집니다.'
+        },
+        {
+          id: 'DX-00010',
+          name: '본태성 고혈압 (혈압 경계 포함)',
+          system: '순환·심혈관계',
+          penalty: 9,
+          solution: '저염 식단, 주 150분 유산소 운동, 체중 관리 및 가정용 혈압계 정기 기록을 병행하세요.',
+          untreated: '심장 비대, 뇌혈관·신장 손상 등 2036년 중증 심뇌혈관 합병증 위험이 크게 상승합니다.'
+        },
+        {
+          id: 'DX-00011',
+          name: '당뇨 전단계 · 혈당 변동성',
+          system: '대사·내분비계',
+          penalty: 8,
+          solution: '식후 15분 걷기, 당류·액상과당 절제, 식이섬유 우선 섭취 및 하체 근력 운동을 실천하세요.',
+          untreated: '제2형 당뇨병으로 진행되어 미세혈관·신경·망막 합병증 위험이 높아집니다.'
+        },
+        {
+          id: 'DX-00012',
+          name: '턱관절 장애 (TMJ)',
+          system: '이비인후·구강계',
+          penalty: 5,
+          solution: '턱 괴기·한쪽 씹기·이 악물기를 교정하고 거북목 자세 개선과 온찜질을 병행하세요.',
+          untreated: '입 벌림 제한, 관절 잡음·통증, 안면 비대칭 및 이명·두통으로 이어집니다.'
+        },
+        {
+          id: 'DX-00013',
+          name: '만성 피로 · 번아웃 증후군',
+          system: '정신·스트레스계',
+          penalty: 7,
+          solution: '하루 10분 야외 산책과 호흡 명상, 수면 7시간 이상 확보 및 과도한 카페인 의존을 줄이세요.',
+          untreated: '면역 저하, 수면 붕괴, 우울감 심화 및 전반적인 생활 기능 저하가 장기화됩니다.'
+        },
+        {
+          id: 'DX-00014',
+          name: '비알코올성 지방간 · 복부 대사 부담',
+          system: '대사·내분비계',
+          penalty: 7,
+          solution: '좌식 시간 축소, 주 3~4회 유산소+근력 복합 운동 및 체중 5~7% 점진적 감량을 목표로 하세요.',
+          untreated: '간 염증·섬유화 및 이상지질혈증·심혈관 질환 위험이 함께 증가합니다.'
+        },
+        {
+          id: 'DX-00015',
+          name: '알레르기 비염 · 구강호흡',
+          system: '호흡기계',
+          penalty: 4,
+          solution: '실내 미세먼지·침구 관리, 생리식염수 코 세척 및 코 호흡·바른 목 자세를 유지하세요.',
+          untreated: '수면 중 코골이·저산소 피로가 누적되어 낮 시간 집중력 저하와 만성 부비동염을 유발합니다.'
+        },
+        {
+          id: 'DX-00016',
+          name: '아토피 피부염 · 만성 피부 건조',
+          system: '피부·면역계',
+          penalty: 5,
+          solution: '미온수 짧은 샤워 후 3분 이내 보습, 충분한 수면·수분 섭취 및 스트레스 관리를 지속하세요.',
+          untreated: '야간 가려움으로 수면의 질이 무너지고 피부 태선화 및 2차 감염 위험이 높아집니다.'
+        }
+      ];
+
+      function buildTenThousandDiseases() {
+        const list = FEATURED_DISEASES.map((d) => ({ ...d, custom: false }));
+
+        const rootConditions = {
+          '근골격·척추계': ['경추 긴장성 통증', '흉추 후만 불균형', '요추 염좌', '어깨 회전근개 부담', '무릎 슬개대퇴 증후군', '발목 안정성 저하', '골반 전방경사', '팔꿈치 외상과염', '근막통증 증후군', '골밀도 감소 경향'],
+          '신경·수면계': ['수면 위상 지연', '기면·주간 졸림', '말초 신경 저림', '자율신경 실조', '이명성 신경 피로', '하지불안 증후군', '어지럼·전정 피로', '집중력 저하형 피로', '만성 군발 두통', '수면 무호흡 경향'],
+          '순환·심혈관계': ['기립성 저혈압', '말초 혈액순환 저하', '부정맥·두근거림', '하지정맥류 초기', '고지혈증 경향', '혈압 변동성 증가', '만성 하체 부종', '심박 변이도 저하', '수족냉증', '혈관 탄성 저하'],
+          '대사·내분비계': ['갑상선 기능 저하 경향', '갑상선 기능 항진 경향', '인슐린 저항성', '고중성지방혈증', '고요산혈증·통풍 위험', '비타민D 결핍', '철분 부족 빈혈', '복부 내장지방 축적', '전해질 수분 불균형', '기초대사 저하'],
+          '소화기계': ['과민성 대장 증후군', '만성 표재성 위염', '기능성 변비', '담즙 정체성 소화부담', '식후 복부 팽만감', '위산 과다 속쓰림', '장내 미생물 불균형', '만성 구내 소화피로', '담석 위험 체질', '신경성 위경련'],
+          '호흡기계': ['기관지 과민 반응', '만성 얕은 호흡 패턴', '천식 경계 증상', '만성 인후 건조', '후비루 증후군', '운동 유발 호흡 피로', '폐활량 저하 경향', '미세먼지성 기관지염', '부비동 충혈', '야간 코골이'],
+          '안과·시각계': ['VDT 시각 피로 증후군', '근시 진행 부담', '난시성 눈 피로', '안압 상승 경계', '눈꺼풀 떨림·마이봄샘 저하', '야간 빛번짐', '조기 노안 조절 피로', '알레르기 결막염', '황반 산화 스트레스', '청색광 수면 망막 피로'],
+          '피부·면역계': ['지루성 피부염', '만성 두드러기', '피부 장벽 건조증', '스트레스성 원형 탈모', '손 습진·접촉 피부염', '구순염·면역 저하', '만성 여드름 염증', '광노화 피부 손상', '알레르기 과민 체질', '대상포진 위험 면역저하'],
+          '정신·스트레스계': ['직무·학업 스트레스 반응', '만성 불안 긴장', '우울 기분 저하', '디지털 과의존 피로', '감정 소진 증후군', '수면 전 각성 과다', '완벽주의 긴장성 피로', '집중 분산 증후군', '사회적 피로감', '계절성 기분 변동'],
+          '이비인후·구강계': ['만성 치은염·잇몸 피로', '구강 건조증', '야간 이갈이(브럭시즘)', '이관 기능 저하', '소음성 청력 피로', '성대 피로·쉰목소리', '편도선 만성 자극', '설통·구내염 반복', '비중격 만곡 호흡부담', '경부 림프 피로']
+        };
+
+        const modifiers = ['초기 단계', '생활습관 연관형', '좌식 누적형', '만성 경계형', '계절 악화형', '스트레스 유발형', '야간 증상형', '업무 집중형', '재발 관리형', '예방 관찰형'];
+        const grades = ['경도 (1단계)', '중등도 (2단계)', '집중관리 (3단계)', '장기추적 (4단계)', '복합요인 (5단계)', '연령누적 (6단계)', '자세연동 (7단계)', '수면연동 (8단계)', '대사연동 (9단계)', '2036 고위험 대비 (10단계)'];
+
+        let seq = list.length + 1;
+        for (let s = 0; s < BODY_SYSTEMS.length && seq <= 10000; s++) {
+          const sys = BODY_SYSTEMS[s];
+          const roots = rootConditions[sys];
+          for (let r = 0; r < roots.length && seq <= 10000; r++) {
+            for (let m = 0; m < modifiers.length && seq <= 10000; m++) {
+              for (let g = 0; g < grades.length && seq <= 10000; g++) {
+                if (seq > 10000) break;
+                const code = 'DX-' + String(seq).padStart(5, '0');
+                const penalty = 3 + ((g + r) % 7); // 3~9점
+                list.push({
+                  id: code,
+                  name: `${roots[r]} (${modifiers[m]} · ${grades[g]})`,
+                  system: sys,
+                  penalty,
+                  custom: false
+                });
+                seq++;
+              }
+            }
+          }
+        }
+        return list;
+      }
+
+      const DISEASE_CATALOG = buildTenThousandDiseases();
+
+      // ---------------------------------------------------------------------
+      // 2. 직업군 데이터베이스 (15종 + 직접 입력)
+      // ---------------------------------------------------------------------
+      const JOB_PROFILES = {
+        student: {
+          label: '대학생 · 대학원생',
+          riskPenalty: 2,
+          avgShift: 1,
+          tip: '노트북 과제와 강의 수강 시 화면을 눈높이로 올리고, 50분 집중마다 5분간 일어나 목·어깨를 풀어 주세요.'
+        },
+        jobseeker: {
+          label: '취업준비생 · 수험생',
+          riskPenalty: 3,
+          avgShift: 0,
+          tip: '도서관·스터디카페에서 고개를 숙이는 시간이 깁니다. 독서대 사용과 매시간 1분 턱 당기기가 효과적입니다.'
+        },
+        developer: {
+          label: 'IT · 개발자 · 엔지니어',
+          riskPenalty: 4,
+          avgShift: -1,
+          tip: '모니터 중앙을 시선과 맞추고 손목·경추 긴장을 풀기 위해 1시간마다 스탠딩 스트레칭을 실천하세요.'
+        },
+        office: {
+          label: '사무직 · 직장인',
+          riskPenalty: 3,
+          avgShift: -1,
+          tip: '장시간 좌식으로 굽은 등과 허리 피로가 누적됩니다. 점심시간 15분 걷기와 흉추 펴기 루틴을 추천합니다.'
+        },
+        designer: {
+          label: '디자이너 · 크리에이터',
+          riskPenalty: 3,
+          avgShift: 0,
+          tip: '화면·태블릿에 얼굴이 가까워지기 쉽습니다. 의자 등받이를 세우고 20-20-20 눈 휴식을 병행하세요.'
+        },
+        teacher: {
+          label: '교사 · 강사 · 교육직',
+          riskPenalty: 2,
+          avgShift: 1,
+          tip: '기립 수업과 행정 좌식이 교차하므로 종아리·목 스트레칭과 꾸준한 수분 보충이 중요합니다.'
+        },
+        medical: {
+          label: '의료 · 간호 · 보건직',
+          riskPenalty: 4,
+          avgShift: -2,
+          tip: '교대 근무와 기립 피로가 큽니다. 취침 환경 고정과 허리·발목 이완 루틴을 우선 관리하세요.'
+        },
+        service: {
+          label: '서비스 · 영업 · 매장직',
+          riskPenalty: 2,
+          avgShift: 0,
+          tip: '장시간 서 있거나 이동이 잦아 하체 부종과 어깨 긴장이 생깁니다. 틈틈이 어깨 회전과 발목 펌핑을 하세요.'
+        },
+        driver: {
+          label: '운전 · 배송 · 물류직',
+          riskPenalty: 4,
+          avgShift: -2,
+          tip: '헤드레스트에 뒤통수가 가볍게 닿도록 시트 각도를 맞추고, 정차 휴식 시 허리 펴기 스트레칭을 실천하세요.'
+        },
+        field: {
+          label: '제조 · 건설 · 현장직',
+          riskPenalty: 3,
+          avgShift: -1,
+          tip: '반복 근골격 하중이 크므로 작업 전후 5분 관절 워밍업과 충분한 수면·수분 회복이 핵심입니다.'
+        },
+        freelancer: {
+          label: '프리랜서 · 재택근무',
+          riskPenalty: 3,
+          avgShift: 0,
+          tip: '침대나 소파 작업은 거북목을 급격히 악화시킵니다. 전용 책상 공간 분리와 정시 기상을 유지하세요.'
+        },
+        homemaker: {
+          label: '주부 · 가사 · 육아',
+          riskPenalty: 2,
+          avgShift: 0,
+          tip: '고개를 숙여 가사·돌봄을 하는 동작이 많습니다. 허리를 굽히기보다 무릎을 살짝 굽혀 척추 부담을 줄이세요.'
+        },
+        athlete: {
+          label: '운동선수 · 트레이너',
+          riskPenalty: 0,
+          avgShift: 5,
+          tip: '활동량은 우수하지만 과훈련·수면 부족을 경계하고 경추·고관절 가동성 회복 루틴을 포함하세요.'
+        },
+        senior: {
+          label: '은퇴 · 시니어',
+          riskPenalty: 2,
+          avgShift: -3,
+          tip: '낙상 예방을 위한 하체 근력 유지와 규칙적인 야외 산책, 수분·수면 관리가 2036년 건강의 핵심입니다.'
+        },
+        custom: {
+          label: '기타 (직접 입력)',
+          riskPenalty: 2,
+          avgShift: 0,
+          tip: '같은 자세가 1시간 이상 이어지지 않도록 알람을 맞추고 목·어깨·허리 스트레칭을 습관화해 보세요.'
+        }
+      };
+
+      const PERSONA_PRESETS = {
+        jimin: {
+          title: '박지민',
+          age: 22,
+          gender: 'female',
+          heightCm: 168,
+          weightKg: 58,
+          job: 'student',
+          neckAngle: 16,
+          sleepHours: 6.0,
+          sittingHours: 8.0,
+          waterCups: 4,
+          caffeineCups: 2
+        },
+        seojun: {
+          title: '익명2',
+          age: 25,
+          gender: 'male',
+          heightCm: 176,
+          weightKg: 74,
+          job: 'jobseeker',
+          neckAngle: 22,
+          sleepHours: 5.5,
+          sittingHours: 9.5,
+          waterCups: 3,
+          caffeineCups: 3
+        },
+        minji: {
+          title: '익명3',
+          age: 29,
+          gender: 'female',
+          heightCm: 165,
+          weightKg: 56,
+          job: 'office',
+          neckAngle: 19,
+          sleepHours: 5.0,
+          sittingHours: 8.5,
+          waterCups: 5,
+          caffeineCups: 2
+        }
+      };
+
+      const AVATAR_STYLES = [
+        {
+          name: '캠퍼스 캐주얼',
+          topColor: '#1d6f82',
+          topShade: '#124e5d',
+          pantsColor: '#2c3e55',
+          pantsShade: '#1c2938',
+          skinBase: '#f7cfb6',
+          skinShade: '#dfa787',
+          hairColor: '#272329'
+        },
+        {
+          name: '퓨처 메디컬',
+          topColor: '#e2f1f5',
+          topShade: '#b8d7e0',
+          pantsColor: '#1e5063',
+          pantsShade: '#133745',
+          skinBase: '#f6d2bc',
+          skinShade: '#dca98b',
+          hairColor: '#1e293b'
+        },
+        {
+          name: '액티브 트레이닝',
+          topColor: '#334155',
+          topShade: '#1e293b',
+          pantsColor: '#0f172a',
+          pantsShade: '#020617',
+          skinBase: '#f4c9ae',
+          skinShade: '#d89d7d',
+          hairColor: '#3b2c26'
+        }
+      ];
+
+      // ---------------------------------------------------------------------
+      // 3. 앱 전역 상태 (오프라인 로컬 저장 포함)
+      // ---------------------------------------------------------------------
+      const STORAGE_KEY = 'bio_twin_offline_history_v2';
+
+      function loadHistorySafe() {
+        try {
+          const raw = window.localStorage.getItem(STORAGE_KEY);
+          if (!raw) return [];
+          const parsed = JSON.parse(raw);
+          return Array.isArray(parsed) ? parsed : [];
+        } catch (err) {
+          return [];
+        }
+      }
+
+      function saveHistorySafe(items) {
+        try {
+          window.localStorage.setItem(STORAGE_KEY, JSON.stringify(items.slice(0, 20)));
+        } catch (err) {
+          // file:// 제한 환경에서도 오류 없이 메모리 동작 유지
+        }
+      }
+
+      const state = {
+        currentStep: 1,
+        yearMode: '2026',
+        persona: 'jimin',
+        avatarStyleIndex: 0,
+        age: 22,
+        gender: 'female',
+        heightCm: 168,
+        weightKg: 58,
+        job: 'student',
+        customJobTitle: '',
+        neckAngle: 16,
+        sleepHours: 6.0,
+        sittingHours: 8.0,
+        waterCups: 4,
+        caffeineCups: 2,
+        selectedDiseases: [],
+        diseaseSystemFilter: '전체',
+        diseaseQuery: '',
+        // 아바타 부드러운 보간 변수
+        targetYaw: 0.25,
+        smoothYaw: 0.25,
+        smoothNeck: 16,
+        smoothHunch: 0.35,
+        smoothScore: 74,
+        stretchPulse: 0,
+        isDragging: false,
+        lastDragX: 0,
+        // 웹캠 상태
+        webcamActive: false,
+        webcamStream: null,
+        // 저장 기록
+        history: loadHistorySafe()
+      };
+
+      // ---------------------------------------------------------------------
+      // 4. 토스트 메시지 (alert 대체)
+      // ---------------------------------------------------------------------
+      let toastTimer = null;
+      function showToast(msg) {
+        const el = document.getElementById('toastBox');
+        if (!el) return;
+        el.textContent = msg;
+        el.classList.add('show');
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => {
+          el.classList.remove('show');
+        }, 2600);
+      }
+
+      // ---------------------------------------------------------------------
+      // 5. 핵심 건강 점수 · 평균 대비 · 2036 예측 계산 엔진
+      // ---------------------------------------------------------------------
+      function getCurrentJobInfo() {
+        const base = JOB_PROFILES[state.job] || JOB_PROFILES.student;
+        const custom = state.customJobTitle.trim();
+        return {
+          label: state.job === 'custom' && custom ? custom : base.label,
+          riskPenalty: base.riskPenalty,
+          avgShift: base.avgShift,
+          tip: base.tip
+        };
+      }
+
+      function getDiseaseGuide(d) {
+        if (d.solution && d.untreated) {
+          return { solution: d.solution, untreated: d.untreated };
+        }
+        const tpl = SYSTEM_GUIDES[d.system] || SYSTEM_GUIDES['사용자 직접 입력'];
+        return {
+          solution: tpl.solution,
+          untreated: tpl.untreated
+        };
+      }
+
+      function computeHealthMetrics() {
+        const age = Math.max(10, Math.min(90, Number(state.age) || 22));
+        const heightCm = Math.max(130, Math.min(210, Number(state.heightCm) || 168));
+        const heightM = heightCm / 100;
+        const weightKg = Math.max(35, Math.min(150, Number(state.weightKg) || 58));
+        const bmi = weightKg / (heightM * heightM);
+        const jobInfo = getCurrentJobInfo();
+
+        let score = 100;
+
+        // 나이·BMI·직업 부담
+        if (age > 35) score -= Math.min(12, Math.round((age - 35) * 0.25));
+        if (bmi < 18.5) score -= Math.min(8, Math.round((18.5 - bmi) * 2.5));
+        else if (bmi >= 25) score -= Math.min(14, Math.round((bmi - 24.5) * 2.8));
+        score -= jobInfo.riskPenalty;
+
+        // 목 각도·수면·좌식·수분·카페인
+        if (state.neckAngle > 10) score -= Math.round((state.neckAngle - 10) * 1.15);
+        if (state.sleepHours < 7) score -= Math.round((7 - state.sleepHours) * 5);
+        else if (state.sleepHours > 9) score -= Math.round((state.sleepHours - 9) * 3);
+        if (state.sittingHours > 5) score -= Math.round((state.sittingHours - 5) * 2.6);
+        if (state.waterCups < 5) score -= (5 - state.waterCups) * 2;
+        else if (state.waterCups >= 7) score += 2;
+        if (state.caffeineCups > 2) score -= (state.caffeineCups - 2) * 3;
+
+        // 질병 감점 (최대 28점)
+        const diseasePenaltyRaw = state.selectedDiseases.reduce(
+          (sum, d) => sum + (Number(d.penalty) || 5),
+          0
+        );
+        const diseasePenalty = Math.min(28, diseasePenaltyRaw);
+        score -= diseasePenalty;
+
+        const currentScore = Math.max(12, Math.min(100, score));
+
+        // 동연령·성별·직업군 기준 평균 점수 및 권장 체중
+        const genderBase = state.gender === 'male' ? 73 : 75;
+        const ageAdjust = age <= 29 ? 0 : -Math.min(14, Math.round((age - 29) * 0.35));
+        const avgScore = Math.max(48, Math.min(90, genderBase + ageAdjust + jobInfo.avgShift));
+        const scoreDiffFromAvg = currentScore - avgScore;
+        const relativeRatioPercent = Math.round((currentScore / Math.max(1, avgScore)) * 100);
+
+        const idealWeight = state.gender === 'male'
+          ? heightM * heightM * 22.0
+          : heightM * heightM * 20.8;
+        const weightDiffFromIdeal = weightKg - idealWeight;
+
+        // 2036년(10년 후) 누적 예측
+        const cumulativeDrop = Math.round((100 - currentScore) * 0.48);
+        const futureScore = Math.max(8, Math.min(98, currentScore - cumulativeDrop));
+        const riskPercent = Math.max(6, Math.min(96, 100 - futureScore));
+
+        // 현재 표시 모드(2026 또는 2036)에 따른 활성 점수
+        const activeScore = state.yearMode === '2036' ? futureScore : currentScore;
+
+        let auraColor = '#10b981';
+        let auraLabel = '오라: 양호 (초록)';
+        let auraLevel = 'good';
+        if (activeScore < 55) {
+          auraColor = '#ef4444';
+          auraLabel = '오라: 주의 필요 (빨강)';
+          auraLevel = 'danger';
+        } else if (activeScore < 76) {
+          auraColor = '#f59e0b';
+          auraLabel = '오라: 경계 관찰 (노랑)';
+          auraLevel = 'warn';
+        }
+
+        let riskLabel = `${riskPercent}% · 안정적 관리`;
+        let barColor = '#10b981';
+        if (riskPercent >= 55) {
+          riskLabel = `${riskPercent}% · 2036 집중 교정 필요`;
+          barColor = '#ef4444';
+        } else if (riskPercent >= 32) {
+          riskLabel = `${riskPercent}% · 습관 교정 권장`;
+          barColor = '#f59e0b';
+        }
+
+        return {
+          age,
+          heightCm,
+          weightKg,
+          bmi,
+          jobLabel: jobInfo.label,
+          jobTip: jobInfo.tip,
+          avgScore,
+          scoreDiffFromAvg,
+          relativeRatioPercent,
+          idealWeight,
+          weightDiffFromIdeal,
+          currentScore,
+          futureScore,
+          activeScore,
+          riskPercent,
+          diseasePenalty,
+          auraColor,
+          auraLabel,
+          auraLevel,
+          riskLabel,
+          barColor
+        };
+      }
+
+      // ---------------------------------------------------------------------
+      // 6. 부드럽고 실제 사람 같은 휴먼 디지털 트윈 캔버스 렌더러
+      // ---------------------------------------------------------------------
+      const canvas = document.getElementById('twinCanvas');
+      const ctx = canvas ? canvas.getContext('2d') : null;
+      let canvasW = 380;
+      let canvasH = 360;
+
+      function resizeCanvas() {
+        if (!canvas || !ctx) return;
+        const stage = document.getElementById('canvasStage');
+        if (!stage) return;
+        const rect = stage.getBoundingClientRect();
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        canvasW = Math.max(260, Math.floor(rect.width));
+        canvasH = Math.max(260, Math.floor(rect.height));
+        canvas.width = canvasW * dpr;
+        canvas.height = canvasH * dpr;
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      }
+
+      function lerp(a, b, t) {
+        return a + (b - a) * t;
+      }
+
+      // 부드러운 입체 팔다리(테이퍼드 캡슐) 그리기 헬퍼
+      function drawLimb(x1, y1, x2, y2, r1, r2, colorMain, colorShade) {
+        const dx = x2 - x1;
+        const dy = y2 - y1;
+        const len = Math.hypot(dx, dy) || 1;
+        const nx = -dy / len;
+        const ny = dx / len;
+
+        const grad = ctx.createLinearGradient(x1 - nx * r1, y1 - ny * r1, x1 + nx * r1, y1 + ny * r1);
+        grad.addColorStop(0, colorMain);
+        grad.addColorStop(0.65, colorMain);
+        grad.addColorStop(1, colorShade);
+
+        ctx.fillStyle = grad;
+        ctx.beginPath();
+        ctx.moveTo(x1 + nx * r1, y1 + ny * r1);
+        ctx.lineTo(x2 + nx * r2, y2 + ny * r2);
+        ctx.arc(x2, y2, r2, Math.atan2(ny, nx), Math.atan2(-ny, -nx), false);
+        ctx.lineTo(x1 - nx * r1, y1 - ny * r1);
+        ctx.arc(x1, y1, r1, Math.atan2(-ny, -nx), Math.atan2(ny, nx), false);
+        ctx.closePath();
+        ctx.fill();
+      }
+
+      function renderHumanAvatar(timestamp) {
+        if (!ctx) return;
+        const t = (timestamp || 0) * 0.001;
+        const metrics = computeHealthMetrics();
+        const is2036 = state.yearMode === '2036';
+        const style = AVATAR_STYLES[state.avatarStyleIndex % AVATAR_STYLES.length];
+
+        // 목표 자세 계산 (2036 모드에서는 습관 누적에 따라 거북목·등 굽힘 증폭)
+        const futureMultiplier = is2036 ? 1.42 : 1.0;
+        const targetNeck = Math.min(54, state.neckAngle * futureMultiplier);
+        const sittingFactor = Math.max(0, (state.sittingHours - 4) / 10);
+        const targetHunch = Math.min(1, (targetNeck / 46) * 0.65 + sittingFactor * 0.35 + (is2036 ? 0.14 : 0));
+
+        // 부드러운 관성 보간
+        state.smoothYaw = lerp(state.smoothYaw, state.targetYaw, 0.11);
+        state.smoothNeck = lerp(state.smoothNeck, targetNeck, 0.09);
+        state.smoothHunch = lerp(state.smoothHunch, targetHunch, 0.08);
+        state.smoothScore = lerp(state.smoothScore, metrics.activeScore, 0.08);
+        if (state.stretchPulse > 0.002) {
+          state.stretchPulse *= 0.94;
+        } else {
+          state.stretchPulse = 0;
+        }
+
+        ctx.clearRect(0, 0, canvasW, canvasH);
+
+        const cx = canvasW * 0.5;
+        const floorY = canvasH * 0.87;
+        const breath = Math.sin(t * 2.1);
+        const gentleSway = Math.sin(t * 1.15) * 1.8;
+
+        // 좌우 회전 투영 계수 (-1 ~ 1)
+        const yawSin = Math.sin(state.smoothYaw);
+        const yawCos = Math.cos(state.smoothYaw);
+        const frontFactor = Math.abs(yawCos); // 1: 정면, 0: 완전 측면
+        const sideDir = yawSin >= 0 ? 1 : -1;
+
+        // 키·몸무게·성별에 비례한 자연스러운 인체 비율
+        const heightScale = Math.max(0.86, Math.min(1.12, 0.98 + ((metrics.heightCm - 168) / 168) * 0.5));
+        const bmiScale = Math.max(0.82, Math.min(1.26, metrics.bmi / 21.2));
+        const isMale = state.gender === 'male';
+
+        // 1) 바닥 3D 링 & 생체 에너지 오라(Aura)
+        const auraPulse = 1 + Math.sin(t * 2.6) * 0.06;
+        const auraGrad = ctx.createRadialGradient(cx, floorY - 125 * heightScale, 15, cx, floorY - 110 * heightScale, 138 * auraPulse);
+        auraGrad.addColorStop(0, metrics.auraColor + '36');
+        auraGrad.addColorStop(0.55, metrics.auraColor + '16');
+        auraGrad.addColorStop(1, metrics.auraColor + '00');
+        ctx.fillStyle = auraGrad;
+        ctx.beginPath();
+        ctx.arc(cx, floorY - 115 * heightScale, 138 * auraPulse, 0, Math.PI * 2);
+        ctx.fill();
+
+        // 바닥 플랫폼 그림자 & 디지털 트윈 스캔 링
+        ctx.fillStyle = 'rgba(15, 23, 42, 0.13)';
+        ctx.beginPath();
+        ctx.ellipse(cx, floorY + 2, 58 * bmiScale, 13, 0, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.strokeStyle = metrics.auraColor + '88';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.ellipse(cx, floorY + 2, 72 * auraPulse, 16 * auraPulse, 0, 0, Math.PI * 2);
+        ctx.stroke();
+
+        // 2) 관절 좌표 계산 (골반 → 허리 → 어깨 → 목 → 머리)
+        const hipX = cx + gentleSway * 0.4;
+        const hipY = floorY - 110 * heightScale + breath * 1.1;
+
+        // 측면일수록 거북목·굽은 등 전방 돌출이 뚜렷하게 보이도록 투영
+        const sideVisibility = 0.28 + Math.abs(yawSin) * 0.72;
+        const hunchLeanX = (state.smoothHunch * 26 * sideVisibility) * sideDir;
+        const torsoHeight = (78 - state.smoothHunch * 9) * heightScale + breath * 1.5;
+
+        const shoulderX = hipX + hunchLeanX + gentleSway * 0.5;
+        const shoulderY = hipY - torsoHeight;
+
+        const neckRad = (state.smoothNeck * Math.PI) / 180;
+        const neckLen = 20 * heightScale;
+        const neckForwardX = Math.sin(neckRad) * (neckLen + 14) * sideVisibility * sideDir;
+        const neckUpY = Math.cos(neckRad) * neckLen;
+
+        const headX = shoulderX + neckForwardX;
+        const headY = shoulderY - neckUpY - 18 * heightScale;
+
+        // 폭 계산
+        const shoulderHalfW = (28 * Math.max(0.32, frontFactor) + 8) * bmiScale * (isMale ? 1.08 : 0.94);
+        const waistHalfW = (20 * Math.max(0.32, frontFactor) + 6) * bmiScale * (isMale ? 1.02 : 0.88);
+        const hipHalfW = (22 * Math.max(0.32, frontFactor) + 7) * bmiScale * (isMale ? 0.98 : 1.05);
+
+        // 다리 좌표
+        const legSpread = (14 * Math.max(0.28, frontFactor) + 4) * Math.min(1.15, bmiScale);
+        const leftHipX = hipX - legSpread;
+        const rightHipX = hipX + legSpread;
+        const kneeY = hipY + 52 * heightScale;
+        const footY = floorY - 4;
+        const legR1 = 10.5 * bmiScale;
+        const legR2 = 7.2 * bmiScale;
+
+        // 팔 좌표 (스트레칭 체험 시 양팔을 부드럽게 들어올림)
+        const stretchLift = state.stretchPulse * 72;
+        const armSwing = Math.sin(t * 1.6) * 2.5;
+        const leftShoulderX = shoulderX - shoulderHalfW * 0.92;
+        const rightShoulderX = shoulderX + shoulderHalfW * 0.92;
+        const leftElbowX = leftShoulderX - (7 + stretchLift * 0.25) * Math.max(0.4, frontFactor) + hunchLeanX * 0.15;
+        const rightElbowX = rightShoulderX + (7 + stretchLift * 0.25) * Math.max(0.4, frontFactor) + hunchLeanX * 0.15;
+        const elbowY = shoulderY + 40 * heightScale - stretchLift * 0.55;
+        const leftHandX = leftElbowX - (4 + stretchLift * 0.12) * Math.max(0.4, frontFactor) + armSwing * 0.4;
+        const rightHandX = rightElbowX + (4 + stretchLift * 0.12) * Math.max(0.4, frontFactor) - armSwing * 0.4;
+        const handY = elbowY + 38 * heightScale - stretchLift * 0.85;
+        const armR1 = 7.8 * Math.min(1.18, bmiScale);
+        const armR2 = 5.6 * Math.min(1.18, bmiScale);
+
+        // 3) 뒷팔 (회전에 따라 가려지는 쪽을 먼저 그림)
+        if (sideDir > 0) {
+          drawLimb(leftShoulderX, shoulderY + 6, leftElbowX, elbowY, armR1, armR2 + 0.8, style.topShade, style.topShade);
+          drawLimb(leftElbowX, elbowY, leftHandX, handY, armR2 + 0.5, armR2 - 0.6, style.skinShade, style.skinShade);
+          ctx.fillStyle = style.skinShade;
+          ctx.beginPath();
+          ctx.arc(leftHandX, handY, armR2, 0, Math.PI * 2);
+          ctx.fill();
+        } else {
+          drawLimb(rightShoulderX, shoulderY + 6, rightElbowX, elbowY, armR1, armR2 + 0.8, style.topShade, style.topShade);
+          drawLimb(rightElbowX, elbowY, rightHandX, handY, armR2 + 0.5, armR2 - 0.6, style.skinShade, style.skinShade);
+          ctx.fillStyle = style.skinShade;
+          ctx.beginPath();
+          ctx.arc(rightHandX, handY, armR2, 0, Math.PI * 2);
+          ctx.fill();
+        }
+
+        // 4) 양다리 & 신발
+        drawLimb(leftHipX, hipY, leftHipX - 2, kneeY, legR1, legR2 + 1, style.pantsColor, style.pantsShade);
+        drawLimb(leftHipX - 2, kneeY, leftHipX - 3, footY, legR2 + 0.8, legR2 - 1, style.pantsColor, style.pantsShade);
+        drawLimb(rightHipX, hipY, rightHipX + 2, kneeY, legR1, legR2 + 1, style.pantsColor, style.pantsShade);
+        drawLimb(rightHipX + 2, kneeY, rightHipX + 3, footY, legR2 + 0.8, legR2 - 1, style.pantsColor, style.pantsShade);
+
+        // 신발 (부드러운 둥근 운동화)
+        ctx.fillStyle = '#1e293b';
+        ctx.beginPath();
+        ctx.ellipse(leftHipX - 3 + sideDir * 3, footY + 2, 11, 5.5, 0, 0, Math.PI * 2);
+        ctx.ellipse(rightHipX + 3 + sideDir * 3, footY + 2, 11, 5.5, 0, 0, Math.PI * 2);
+        ctx.fill();
+
+        // 5) 유기적 곡선 상체(토르소)
+        const torsoGrad = ctx.createLinearGradient(shoulderX - shoulderHalfW, shoulderY, shoulderX + shoulderHalfW, hipY);
+        torsoGrad.addColorStop(0, style.topColor);
+        torsoGrad.addColorStop(0.65, style.topColor);
+        torsoGrad.addColorStop(1, style.topShade);
+
+        ctx.fillStyle = torsoGrad;
+        ctx.beginPath();
+        ctx.moveTo(shoulderX - shoulderHalfW, shoulderY + 4);
+        ctx.quadraticCurveTo(shoulderX, shoulderY - 8, shoulderX + shoulderHalfW, shoulderY + 4);
+        ctx.bezierCurveTo(
+          shoulderX + shoulderHalfW + 3, shoulderY + torsoHeight * 0.35,
+          hipX + waistHalfW + 2, hipY - torsoHeight * 0.25,
+          hipX + hipHalfW, hipY + 4
+        );
+        ctx.quadraticCurveTo(hipX, hipY + 12, hipX - hipHalfW, hipY + 4);
+        ctx.bezierCurveTo(
+          hipX - waistHalfW - 2, hipY - torsoHeight * 0.25,
+          shoulderX - shoulderHalfW - 3, shoulderY + torsoHeight * 0.35,
+          shoulderX - shoulderHalfW, shoulderY + 4
+        );
+        ctx.closePath();
+        ctx.fill();
+
+        // 옷 깃(네크라인) & 입체 하이라이트
+        ctx.strokeStyle = 'rgba(255,255,255,0.28)';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(shoulderX, shoulderY + 2, Math.max(8, shoulderHalfW * 0.34), 0.15 * Math.PI, 0.85 * Math.PI);
+        ctx.stroke();
+
+        // 6) 척추·경추 디지털 트윈 실시간 오버레이 라인 (트윈 포인트 시각화)
+        ctx.save();
+        ctx.strokeStyle = metrics.auraColor;
+        ctx.lineWidth = 2.6;
+        ctx.setLineDash([4, 3]);
+        ctx.beginPath();
+        ctx.moveTo(hipX, hipY - 4);
+        ctx.quadraticCurveTo(
+          (hipX + shoulderX) * 0.5 - hunchLeanX * 0.35,
+          (hipY + shoulderY) * 0.5,
+          shoulderX,
+          shoulderY
+        );
+        ctx.lineTo(headX, headY + 18);
+        ctx.stroke();
+        ctx.restore();
+
+        // 관절 포인트 점
+        [
+          [hipX, hipY - 4],
+          [shoulderX, shoulderY],
+          [headX, headY + 16]
+        ].forEach(([px, py]) => {
+          ctx.fillStyle = '#ffffff';
+          ctx.strokeStyle = metrics.auraColor;
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.arc(px, py, 3.8, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.stroke();
+        });
+
+        // 7) 목 (부드러운 피부 실린더)
+        drawLimb(shoulderX, shoulderY + 2, headX, headY + 15, 7.2, 6.4, style.skinBase, style.skinShade);
+
+        // 8) 머리 & 자연스러운 표정
+        const headR = 23.5;
+        const headGrad = ctx.createRadialGradient(headX - 6, headY - 7, 4, headX, headY, headR + 4);
+        headGrad.addColorStop(0, '#fde2cf');
+        headGrad.addColorStop(0.7, style.skinBase);
+        headGrad.addColorStop(1, style.skinShade);
+
+        ctx.fillStyle = headGrad;
+        ctx.beginPath();
+        ctx.ellipse(headX, headY, headR * 0.92, headR, neckRad * 0.25 * sideDir, 0, Math.PI * 2);
+        ctx.fill();
+
+        // 귀
+        ctx.fillStyle = style.skinShade;
+        ctx.beginPath();
+        ctx.ellipse(headX - headR * 0.9 * frontFactor, headY + 2, 3.6, 5.5, 0, 0, Math.PI * 2);
+        ctx.ellipse(headX + headR * 0.9 * frontFactor, headY + 2, 3.6, 5.5, 0, 0, Math.PI * 2);
+        ctx.fill();
+
+        // 헤어스타일 (성별별 자연스러운 실루엣)
+        ctx.fillStyle = style.hairColor;
+        ctx.beginPath();
+        ctx.ellipse(headX, headY - 9, headR * 0.98, headR * 0.72, neckRad * 0.2 * sideDir, Math.PI, Math.PI * 2);
+        ctx.fill();
+
+        if (!isMale) {
+          // 여성형 부드러운 사이드 헤어
+          ctx.beginPath();
+          ctx.ellipse(headX - headR * 0.82, headY + 4, 6.2, 16, 0.12, 0, Math.PI * 2);
+          ctx.ellipse(headX + headR * 0.82, headY + 4, 6.2, 16, -0.12, 0, Math.PI * 2);
+          ctx.fill();
+        } else {
+          // 남성형 깔끔한 탑·사이드 라인
+          ctx.beginPath();
+          ctx.ellipse(headX, headY - 14, headR * 0.86, 10, neckRad * 0.18 * sideDir, 0, Math.PI * 2);
+          ctx.fill();
+        }
+
+        // 얼굴(정면/반측면일 때 자연스럽게 표시)
+        const faceOffsetX = yawSin * 11;
+        const isBlink = (t % 4.2) > 4.05;
+        const eyeY = headY - 1;
+        const eyeSep = 8.2 * Math.max(0.35, frontFactor);
+
+        if (frontFactor > 0.15) {
+          // 피로 시 은은한 다크서클 (점수 62 미만)
+          if (state.smoothScore < 62) {
+            ctx.fillStyle = 'rgba(100, 116, 139, 0.25)';
+            ctx.beginPath();
+            ctx.ellipse(headX + faceOffsetX - eyeSep, eyeY + 3.5, 4.5, 2, 0, 0, Math.PI * 2);
+            ctx.ellipse(headX + faceOffsetX + eyeSep, eyeY + 3.5, 4.5, 2, 0, 0, Math.PI * 2);
+            ctx.fill();
+          }
+
+          // 눈
+          ctx.fillStyle = '#1e293b';
+          if (isBlink) {
+            ctx.strokeStyle = '#1e293b';
+            ctx.lineWidth = 1.6;
+            ctx.beginPath();
+            ctx.moveTo(headX + faceOffsetX - eyeSep - 3, eyeY);
+            ctx.lineTo(headX + faceOffsetX - eyeSep + 3, eyeY);
+            ctx.moveTo(headX + faceOffsetX + eyeSep - 3, eyeY);
+            ctx.lineTo(headX + faceOffsetX + eyeSep + 3, eyeY);
+            ctx.stroke();
+          } else {
+            ctx.beginPath();
+            ctx.arc(headX + faceOffsetX - eyeSep, eyeY, 2.3, 0, Math.PI * 2);
+            ctx.arc(headX + faceOffsetX + eyeSep, eyeY, 2.3, 0, Math.PI * 2);
+            ctx.fill();
+            // 눈동자 하이라이트
+            ctx.fillStyle = '#ffffff';
+            ctx.beginPath();
+            ctx.arc(headX + faceOffsetX - eyeSep - 0.7, eyeY - 0.7, 0.8, 0, Math.PI * 2);
+            ctx.arc(headX + faceOffsetX + eyeSep - 0.7, eyeY - 0.7, 0.8, 0, Math.PI * 2);
+            ctx.fill();
+          }
+
+          // 볼 홍조 (건강할수록 생기)
+          if (state.smoothScore >= 72) {
+            ctx.fillStyle = 'rgba(244, 114, 182, 0.18)';
+            ctx.beginPath();
+            ctx.ellipse(headX + faceOffsetX - eyeSep - 2, eyeY + 6, 4.2, 2.4, 0, 0, Math.PI * 2);
+            ctx.ellipse(headX + faceOffsetX + eyeSep + 2, eyeY + 6, 4.2, 2.4, 0, 0, Math.PI * 2);
+            ctx.fill();
+          }
+
+          // 입 표정 (건강 점수에 따라 미소 ↔ 무표정 ↔ 피곤함)
+          ctx.strokeStyle = '#7c2d12';
+          ctx.lineWidth = 1.8;
+          ctx.lineCap = 'round';
+          const mouthY = headY + 9.5;
+          const smileCurve = ((state.smoothScore - 62) / 38) * 4.5; // -5 ~ +4.5
+          ctx.beginPath();
+          ctx.moveTo(headX + faceOffsetX - 5.2, mouthY);
+          ctx.quadraticCurveTo(headX + faceOffsetX, mouthY + smileCurve, headX + faceOffsetX + 5.2, mouthY);
+          ctx.stroke();
+        }
+
+        // 9) 앞팔 (상체 앞에 자연스럽게 겹침)
+        if (sideDir > 0) {
+          drawLimb(rightShoulderX, shoulderY + 6, rightElbowX, elbowY, armR1, armR2 + 0.8, style.topColor, style.topShade);
+          drawLimb(rightElbowX, elbowY, rightHandX, handY, armR2 + 0.5, armR2 - 0.6, style.skinBase, style.skinShade);
+          ctx.fillStyle = style.skinBase;
+          ctx.beginPath();
+          ctx.arc(rightHandX, handY, armR2, 0, Math.PI * 2);
+          ctx.fill();
+        } else {
+          drawLimb(leftShoulderX, shoulderY + 6, leftElbowX, elbowY, armR1, armR2 + 0.8, style.topColor, style.topShade);
+          drawLimb(leftElbowX, elbowY, leftHandX, handY, armR2 + 0.5, armR2 - 0.6, style.skinBase, style.skinShade);
+          ctx.fillStyle = style.skinBase;
+          ctx.beginPath();
+          ctx.arc(leftHandX, handY, armR2, 0, Math.PI * 2);
+          ctx.fill();
+        }
+
+        // 10) 실시간 목 각도 HUD 배지 (캔버스 좌측 상단)
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.88)';
+        ctx.strokeStyle = metrics.auraColor;
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.roundRect ? ctx.roundRect(10, 10, 118, 44, 10) : ctx.rect(10, 10, 118, 44);
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.fillStyle = '#475569';
+        ctx.font = '700 10.5px sans-serif';
+        ctx.fillText(is2036 ? '2036 예상 경추각' : '실시간 경추 각도', 18, 25);
+        ctx.fillStyle = '#0f172a';
+        ctx.font = '800 14px sans-serif';
+        ctx.fillText(`${Math.round(state.smoothNeck)}° · ${Math.round(state.smoothScore)}점`, 18, 44);
+
+        window.requestAnimationFrame(renderHumanAvatar);
+      }
+
+      // ---------------------------------------------------------------------
+      // 7. 드롭다운 초기 옵션 생성
+      // ---------------------------------------------------------------------
+      function populateProfileSelects() {
+        const ageSel = document.getElementById('inputAge');
+        if (ageSel && ageSel.options.length === 0) {
+          for (let a = 10; a <= 90; a++) {
+            const opt = document.createElement('option');
+            opt.value = String(a);
+            opt.textContent = `${a}세`;
+            ageSel.appendChild(opt);
+          }
+          ageSel.value = String(state.age);
+        }
+
+        const heightSel = document.getElementById('inputHeight');
+        if (heightSel && heightSel.options.length === 0) {
+          for (let cm = 130; cm <= 210; cm++) {
+            const opt = document.createElement('option');
+            opt.value = String(cm);
+            opt.textContent = `${cm} cm`;
+            heightSel.appendChild(opt);
+          }
+          heightSel.value = String(state.heightCm);
+        }
+
+        const weightSel = document.getElementById('inputWeight');
+        if (weightSel && weightSel.options.length === 0) {
+          for (let kg = 35; kg <= 150; kg++) {
+            const opt = document.createElement('option');
+            opt.value = String(kg);
+            opt.textContent = `${kg} kg`;
+            weightSel.appendChild(opt);
+          }
+          weightSel.value = String(state.weightKg);
+        }
+
+        const jobSel = document.getElementById('inputJob');
+        if (jobSel && jobSel.options.length === 0) {
+          Object.entries(JOB_PROFILES).forEach(([key, info]) => {
+            const opt = document.createElement('option');
+            opt.value = key;
+            opt.textContent = info.label;
+            jobSel.appendChild(opt);
+          });
+          jobSel.value = state.job;
+        }
+
+        const sysSel = document.getElementById('diseaseSystemFilter');
+        if (sysSel && sysSel.options.length <= 1) {
+          BODY_SYSTEMS.forEach((sys) => {
+            const opt = document.createElement('option');
+            opt.value = sys;
+            opt.textContent = `${sys} (1,000건+)`;
+            sysSel.appendChild(opt);
+          });
+        }
+      }
+
+      // ---------------------------------------------------------------------
+      // 8. 질병 카탈로그 · 선택 목록 · 해결책/미조치 리포트 렌더링
+      // ---------------------------------------------------------------------
+      function toggleDiseaseById(id) {
+        const idx = state.selectedDiseases.findIndex((d) => d.id === id);
+        if (idx >= 0) {
+          const removed = state.selectedDiseases.splice(idx, 1)[0];
+          syncUI();
+          showToast(`'${removed.name}' 질병을 제외했습니다.`);
+          return;
+        }
+        const found = DISEASE_CATALOG.find((d) => d.id === id);
+        if (!found) return;
+        state.selectedDiseases.push({ ...found });
+        syncUI();
+        showToast(`'${found.name}' 질병을 트윈에 반영했습니다.`);
+      }
+
+      function addCustomDisease() {
+        const input = document.getElementById('customDiseaseInput');
+        const sevSel = document.getElementById('customDiseaseSeverity');
+        if (!input) return;
+        const name = input.value.trim();
+        if (!name) {
+          showToast('추가할 질병명을 입력해 주세요.');
+          input.focus();
+          return;
+        }
+        const sev = sevSel ? sevSel.value : '보통';
+        const penalty = sev === '경미' ? 3 : sev === '중점' ? 10 : 6;
+        const id = 'CUSTOM-' + Date.now();
+        state.selectedDiseases.push({
+          id,
+          name,
+          system: '사용자 직접 입력',
+          penalty,
+          custom: true
+        });
+        input.value = '';
+        syncUI();
+        showToast(`직접 입력한 질병 '${name}'이(가) 추가되었습니다.`);
+      }
+
+      function renderDiseaseUI() {
+        // 1단계 대표 질병 8종 빠른 선택 칩
+        const quickEl = document.getElementById('quickDiseaseChips');
+        if (quickEl) {
+          const featured = DISEASE_CATALOG.slice(0, 8);
+          quickEl.innerHTML = featured
+            .map((item) => {
+              const selected = state.selectedDiseases.some((s) => s.id === item.id);
+              const shortName = item.name.split(' (')[0];
+              return `<button type="button" class="disease-chip ${selected ? 'selected' : ''}" data-disease-id="${item.id}">${selected ? '✓ ' : '+ '}${shortName}</button>`;
+            })
+            .join('');
+        }
+
+        // 2단계 10,000개 카탈로그 검색 결과
+        const resultsEl = document.getElementById('diseaseSearchResults');
+        const badgeEl = document.getElementById('diseaseCatalogCountBadge');
+        if (badgeEl) {
+          badgeEl.textContent = `카탈로그 ${DISEASE_CATALOG.length.toLocaleString()}건 · 선택 ${state.selectedDiseases.length}건`;
+        }
+
+        if (resultsEl) {
+          const q = state.diseaseQuery.trim().toLowerCase();
+          const sys = state.diseaseSystemFilter;
+          const matches = [];
+          for (let i = 0; i < DISEASE_CATALOG.length; i++) {
+            const item = DISEASE_CATALOG[i];
+            if (sys !== '전체' && item.system !== sys) continue;
+            if (q) {
+              const hay = (item.name + ' ' + item.id + ' ' + item.system).toLowerCase();
+              if (!hay.includes(q)) continue;
+            }
+            matches.push(item);
+            if (matches.length >= 45) break;
+          }
+
+          if (matches.length === 0) {
+            resultsEl.innerHTML = '<div style="padding:14px; text-align:center; font-size:12px; color:#64748b;">일치하는 질병이 없습니다. 위 입력칸에서 질병명을 직접 추가해 보세요!</div>';
+          } else {
+            resultsEl.innerHTML = matches
+              .map((item) => {
+                const isAdded = state.selectedDiseases.some((s) => s.id === item.id);
+                return `
+                  <div class="disease-row">
+                    <div>
+                      <div style="font-weight:700; color:#0f172a;">${item.name}</div>
+                      <div class="disease-row-meta">${item.id} · ${item.system} · 위험 반영 -${item.penalty}점</div>
+                    </div>
+                    <button type="button" class="row-action-btn ${isAdded ? 'added' : ''}" data-disease-id="${item.id}">
+                      ${isAdded ? '선택됨' : '+ 추가'}
+                    </button>
+                  </div>
+                `;
+              })
+              .join('');
+          }
+        }
+
+        // 선택된 질병 태그
+        const selEl = document.getElementById('selectedDiseasesContainer');
+        if (selEl) {
+          if (state.selectedDiseases.length === 0) {
+            selEl.innerHTML = '<span class="text-xs">아직 선택된 질병이 없습니다. 위 10,000개 목록에서 선택하거나 직접 입력해 추가하세요.</span>';
+          } else {
+            selEl.innerHTML = state.selectedDiseases
+              .map(
+                (d) => `
+                  <span class="selected-tag">
+                    ${d.name} (-${d.penalty}점)
+                    <button type="button" data-remove-disease="${d.id}" aria-label="${d.name} 삭제">×</button>
+                  </span>
+                `
+              )
+              .join('');
+          }
+        }
+
+        // 4단계 질병별 해결책 & 미조치 시 문제점 리포트
+        const guideEl = document.getElementById('reportDiseaseGuide');
+        if (guideEl) {
+          if (state.selectedDiseases.length === 0) {
+            guideEl.innerHTML = `
+              <div class="guide-item">
+                <div class="guide-name">현재 등록된 보유 질병이 없습니다.</div>
+                <p class="guide-line"><strong class="solve">예방 해결책:</strong> 1단계 빠른 선택 또는 2단계 10,000개 질병 검색·직접 입력으로 관심 질병을 추가하면 질병별 맞춤 해결책과 관리하지 않았을 때의 2036년 문제점을 확인할 수 있습니다.</p>
+                <p class="guide-line"><strong class="warn">기본 자세 주의:</strong> 현재 목 각도(${state.neckAngle}°)와 좌식 시간(${state.sittingHours.toFixed(1)}시간)을 방치하면 10년 뒤 거북목·만성 피로 위험이 높아집니다.</p>
+              </div>
+            `;
+          } else {
+            guideEl.innerHTML = state.selectedDiseases
+              .map((d) => {
+                const g = getDiseaseGuide(d);
+                return `
+                  <div class="guide-item">
+                    <div class="guide-head">
+                      <span class="guide-name">${d.name}</span>
+                      <span class="guide-badge">${d.system} · -${d.penalty}점</span>
+                    </div>
+                    <p class="guide-line"><strong class="solve">✔ 해결책:</strong> ${g.solution}</p>
+                    <p class="guide-line"><strong class="warn">⚠ 미조치 시 문제점:</strong> ${g.untreated}</p>
+                  </div>
+                `;
+              })
+              .join('');
+          }
+        }
+      }
+
+      // ---------------------------------------------------------------------
+      // 9. 전체 UI 동기화
+      // ---------------------------------------------------------------------
+      function setStep(step) {
+        const target = Math.max(1, Math.min(5, step));
+        state.currentStep = target;
+
+        document.querySelectorAll('.screen-panel').forEach((panel) => {
+          panel.classList.remove('active');
+        });
+        const activePanel = document.getElementById(`screen-${target}`);
+        if (activePanel) activePanel.classList.add('active');
+
+        document.querySelectorAll('.step-tab').forEach((tab) => {
+          const s = Number(tab.getAttribute('data-step'));
+          tab.classList.toggle('active', s === target);
+        });
+
+        const indicator = document.getElementById('stepIndicatorText');
+        if (indicator) indicator.textContent = `${target} / 5 단계`;
+
+        const prevBtn = document.getElementById('prevStepBtn');
+        const nextBtn = document.getElementById('nextStepBtn');
+        if (prevBtn) prevBtn.disabled = target === 1;
+        if (prevBtn) prevBtn.style.opacity = target === 1 ? '0.45' : '1';
+        if (nextBtn) {
+          nextBtn.textContent = target === 5 ? '1단계 처음으로 ↺' : '다음 단계 →';
+        }
+      }
+
+      function syncUI() {
+        const m = computeHealthMetrics();
+        const genderLabel = state.gender === 'male' ? '남성' : '여성';
+        const diffSign = m.scoreDiffFromAvg >= 0 ? '+' : '';
+        const wSign = m.weightDiffFromIdeal >= 0 ? '+' : '';
+
+        // 좌측 뷰어 정보
+        const personaTitle = document.getElementById('viewerPersonaTitle');
+        if (personaTitle) personaTitle.textContent = `${m.age}세 ${genderLabel} · ${m.jobLabel}`;
+
+        const auraBadge = document.getElementById('auraBadge');
+        if (auraBadge) {
+          auraBadge.textContent = m.auraLabel;
+          auraBadge.className = 'aura-pill' + (m.auraLevel === 'danger' ? ' danger' : m.auraLevel === 'warn' ? ' warn' : '');
+        }
+
+        const canvasStage = document.getElementById('canvasStage');
+        const yearTag = document.getElementById('canvasYearTag');
+        if (canvasStage) canvasStage.classList.toggle('mode-2036', state.yearMode === '2036');
+        if (yearTag) {
+          yearTag.textContent = state.yearMode === '2036'
+            ? '2036년 (10년 후 누적 예측)'
+            : '2026 현재 실시간 동기화';
+        }
+
+        // 상단 타임머신 버튼 스타일
+        const b26 = document.getElementById('btnYear2026');
+        const b36 = document.getElementById('btnYear2036');
+        if (b26 && b36) {
+          b26.className = 'year-btn' + (state.yearMode === '2026' ? ' active' : '');
+          b36.className = 'year-btn' + (state.yearMode === '2036' ? ' active-2036' : '');
+        }
+
+        // KPI 업데이트
+        const kpiCur = document.getElementById('kpiCurrentScore');
+        const kpiAvgDiff = document.getElementById('kpiAvgDiff');
+        const kpiFut = document.getElementById('kpiFutureScore');
+        const kpiRel = document.getElementById('kpiRelativePct');
+        const kpiNeck = document.getElementById('kpiNeckAngle');
+        const kpiDis = document.getElementById('kpiDiseaseCount');
+
+        if (kpiCur) kpiCur.textContent = `${m.currentScore}점`;
+        if (kpiAvgDiff) kpiAvgDiff.textContent = `평균 대비 ${diffSign}${m.scoreDiffFromAvg}점`;
+        if (kpiFut) kpiFut.textContent = `${m.futureScore}점`;
+        if (kpiRel) kpiRel.textContent = `평균 대비 ${m.relativeRatioPercent}%`;
+        if (kpiNeck) kpiNeck.textContent = `${state.neckAngle}°`;
+        if (kpiDis) kpiDis.textContent = `등록 질병 ${state.selectedDiseases.length}건`;
+
+        // 위험도 프로그레스 바
+        const riskLbl = document.getElementById('riskPercentLabel');
+        const riskBar = document.getElementById('riskProgressBar');
+        if (riskLbl) {
+          riskLbl.textContent = m.riskLabel;
+          riskLbl.style.color = m.barColor;
+        }
+        if (riskBar) {
+          riskBar.style.width = `${m.riskPercent}%`;
+          riskBar.style.backgroundColor = m.barColor;
+        }
+
+        // 1단계 프로필 요약
+        const avgBadge = document.getElementById('avgComparisonBadge');
+        if (avgBadge) {
+          avgBadge.textContent = `동연령·성별·직업 평균(${m.avgScore}점) 대비: ${diffSign}${m.scoreDiffFromAvg}점 (${m.relativeRatioPercent}%)`;
+        }
+
+        const bodySum = document.getElementById('bodyStatsSummary');
+        if (bodySum) {
+          bodySum.textContent =
+            `BMI ${m.bmi.toFixed(1)} · 기준 체중(${m.idealWeight.toFixed(1)}kg) 대비 ${wSign}${m.weightDiffFromIdeal.toFixed(1)}kg · 내 점수 ${m.currentScore}점 / 동일 조건 평균 ${m.avgScore}점`;
+        }
+
+        const customJobWrap = document.getElementById('customJobWrap');
+        if (customJobWrap) {
+          customJobWrap.classList.toggle('hidden', state.job !== 'custom');
+        }
+
+        // 2단계 프로필 바 & 슬라이더 수치
+        const s2Sum = document.getElementById('step2ProfileSummary');
+        if (s2Sum) {
+          s2Sum.textContent = `${m.age}세 · ${genderLabel} · ${m.heightCm}cm · ${m.weightKg}kg · ${m.jobLabel} · 질병 ${state.selectedDiseases.length}건`;
+        }
+
+        const vNeck = document.getElementById('valNeckAngle');
+        const vSleep = document.getElementById('valSleepHours');
+        const vSit = document.getElementById('valSittingHours');
+        const vHyd = document.getElementById('valHydrationCaffeine');
+        const vCaf = document.getElementById('valCaffeineCups');
+        if (vNeck) vNeck.textContent = `${state.neckAngle}°`;
+        if (vSleep) vSleep.textContent = `${state.sleepHours.toFixed(1)}시간`;
+        if (vSit) vSit.textContent = `${state.sittingHours.toFixed(1)}시간`;
+        if (vHyd) vHyd.textContent = `물 ${state.waterCups}잔 · 카페인 ${state.caffeineCups}잔`;
+        if (vCaf) vCaf.textContent = String(state.caffeineCups);
+
+        // 3단계 AI 진단
+        const aiPill = document.getElementById('aiScorePill');
+        if (aiPill) aiPill.textContent = `2026 ${m.currentScore}점 → 2036 ${m.futureScore}점`;
+
+        const aiDiag = document.getElementById('aiDiagnosisSummary');
+        if (aiDiag) {
+          const disTxt = state.selectedDiseases.length > 0
+            ? ` 또한 등록된 질병 ${state.selectedDiseases.length}건(-${m.diseasePenalty}점)이 누적 위험 모델에 반영되었습니다.`
+            : '';
+          aiDiag.textContent =
+            `${m.age}세 ${genderLabel}(${m.heightCm}cm · ${m.weightKg}kg · BMI ${m.bmi.toFixed(1)} · ${m.jobLabel}) 기준, ` +
+            `목 숙임 각도 ${state.neckAngle}°, 수면 ${state.sleepHours.toFixed(1)}시간, 하루 좌식 ${state.sittingHours.toFixed(1)}시간을 종합한 현재 점수는 ` +
+            `${m.currentScore}점(동일 조건 평균 ${m.avgScore}점 대비 ${diffSign}${m.scoreDiffFromAvg}점 · ${m.relativeRatioPercent}%)입니다. ` +
+            `현재 습관을 10년간 유지하면 2036년 예상 점수는 ${m.futureScore}점(위험도 ${m.riskPercent}%)으로 예측됩니다.${disTxt}`;
+        }
+
+        const aiJobTitle = document.getElementById('aiJobCoachingTitle');
+        const aiJobText = document.getElementById('aiJobCoachingText');
+        if (aiJobTitle) aiJobTitle.textContent = `직업 맞춤 AI 코칭 — ${m.jobLabel}`;
+        if (aiJobText) aiJobText.textContent = m.jobTip;
+
+        // 4단계 결과 리포트
+        const r26 = document.getElementById('report2026Score');
+        const r26d = document.getElementById('report2026Detail');
+        const r36 = document.getElementById('report2036Score');
+        const r36d = document.getElementById('report2036Detail');
+        const rProf = document.getElementById('reportProfileAvgSummary');
+
+        if (r26) r26.textContent = `${m.currentScore}점`;
+        if (r26d) {
+          r26d.textContent = `${m.age}세 ${genderLabel} · ${m.jobLabel} · 동연령 평균(${m.avgScore}점) 대비 ${diffSign}${m.scoreDiffFromAvg}점 (${m.relativeRatioPercent}%)`;
+        }
+        if (r36) r36.textContent = `${m.futureScore}점`;
+        if (r36d) {
+          r36d.textContent = `10년 누적 위험도 ${m.riskPercent}% · 지금 5분 스트레칭을 실천하면 즉시 자세와 예측 점수가 개선됩니다.`;
+        }
+        if (rProf) {
+          rProf.textContent =
+            `선택 프로필(${m.age}세 ${genderLabel}, ${m.heightCm}cm, ${m.weightKg}kg, ${m.jobLabel})의 체질량지수(BMI)는 ${m.bmi.toFixed(1)}로 ` +
+            `권장 체중(${m.idealWeight.toFixed(1)}kg) 대비 ${wSign}${m.weightDiffFromIdeal.toFixed(1)}kg입니다. ` +
+            `비슷한 연령·성별·직업군 평균 점수(${m.avgScore}점) 대비 현재 점수는 ${diffSign}${m.scoreDiffFromAvg}점(${m.relativeRatioPercent}%) 수준입니다.`;
+        }
+
+        // 5단계 로컬 기록 렌더링
+        const countLbl = document.getElementById('savedCountLabel');
+        const histEl = document.getElementById('historyList');
+        if (countLbl) countLbl.textContent = `${state.history.length}건`;
+        if (histEl) {
+          if (state.history.length === 0) {
+            histEl.innerHTML = '<li class="history-item" style="color:#64748b;">아직 저장된 기록이 없습니다. 4단계에서 ‘오늘 트윈 기록 저장’을 눌러 기록을 남겨보세요.</li>';
+          } else {
+            histEl.innerHTML = state.history
+              .map(
+                (h) => `
+                  <li class="history-item">
+                    <span><strong>${h.date} ${h.time}</strong> · ${h.profile} · 목 ${h.neck}° · 질병 ${h.diseases}건</span>
+                    <strong style="color:#0f5c6e;">2026 ${h.s2026}점 → 2036 ${h.s2036}점</strong>
+                  </li>
+                `
+              )
+              .join('');
+          }
+        }
+
+        renderDiseaseUI();
+      }
+
+      // ---------------------------------------------------------------------
+      // 10. 오프라인 파일 다운로드 헬퍼 (TXT 리포트 / ICS 캘린더 / JSON 백업)
+      // ---------------------------------------------------------------------
+      function downloadTextFile(filename, content, mimeType) {
+        try {
+          const blob = new Blob([content], { type: mimeType || 'text/plain;charset=utf-8' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = filename;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          setTimeout(() => URL.revokeObjectURL(url), 1000);
+          return true;
+        } catch (err) {
+          return false;
+        }
+      }
+
+      function exportTextReport() {
+        const m = computeHealthMetrics();
+        const genderLabel = state.gender === 'male' ? '남성' : '여성';
+        const sign = m.scoreDiffFromAvg >= 0 ? '+' : '';
+        const lines = [
+          '====================================================',
+          '  바이오 트윈 (Bio-Twin) · 2036 예방 헬스케어 리포트',
+          '  기획·제작: 20232818 전시헌 (교양 메타버스를 위한 디지털 트윈)',
+          '====================================================',
+          `생성 시각: ${new Date().toLocaleString('ko-KR')}`,
+          `프로필: ${m.age}세 ${genderLabel} / ${m.heightCm}cm / ${m.weightKg}kg (BMI ${m.bmi.toFixed(1)}) / ${m.jobLabel}`,
+          `생활 습관: 거북목 ${state.neckAngle}° / 수면 ${state.sleepHours}시간 / 좌식 ${state.sittingHours}시간 / 물 ${state.waterCups}잔 / 카페인 ${state.caffeineCups}잔`,
+          '',
+          `[점수 요약]`,
+          `- 2026년 현재 점수: ${m.currentScore}점`,
+          `- 동연령·성별·직업 평균 점수: ${m.avgScore}점 (평균 대비 ${sign}${m.scoreDiffFromAvg}점, ${m.relativeRatioPercent}%)`,
+          `- 2036년(10년 후) 예상 점수: ${m.futureScore}점 (누적 위험도 ${m.riskPercent}%)`,
+          '',
+          `[직업 맞춤 AI 코칭]`,
+          `- ${m.jobTip}`,
+          '',
+          `[등록 질병별 해결책 & 미조치 시 문제점 (${state.selectedDiseases.length}건)]`
+        ];
+
+        if (state.selectedDiseases.length === 0) {
+          lines.push('- 등록된 질병 없음 (기본 바른 자세·수면·수분 관리 권장)');
+        } else {
+          state.selectedDiseases.forEach((d, idx) => {
+            const g = getDiseaseGuide(d);
+            lines.push(`${idx + 1}. ${d.name} (${d.system})`);
+            lines.push(`   · 해결책: ${g.solution}`);
+            lines.push(`   · 미조치 시 문제점: ${g.untreated}`);
+          });
+        }
+        lines.push('', '“오늘 15도 숙인 목이 2036년의 당신을 만듭니다 — 바이오 트윈.”');
+
+        const ok = downloadTextFile('bio_twin_2036_report.txt', lines.join('\n'), 'text/plain;charset=utf-8');
+        showToast(ok ? '오프라인 요약 리포트(bio_twin_2036_report.txt)를 저장했습니다.' : '파일 저장을 지원하지 않는 브라우저입니다.');
+      }
+
+      function exportCalendarIcs() {
+        const now = new Date();
+        const y = now.getFullYear();
+        const mo = String(now.getMonth() + 1).padStart(2, '0');
+        const da = String(now.getDate()).padStart(2, '0');
+        const ics = [
+          'BEGIN:VCALENDAR',
+          'VERSION:2.0',
+          'PRODID:-//Bio-Twin//2036 Preventive Health//KO',
+          'BEGIN:VEVENT',
+          `DTSTART:${y}${mo}${da}T150000`,
+          `DTEND:${y}${mo}${da}T150500`,
+          'RRULE:FREQ=DAILY;COUNT=30',
+          'SUMMARY:[바이오 트윈] 5분 거북목 리셋 스트레칭',
+          'DESCRIPTION:1분 턱 당기기 + 2분 가슴 열기 + 물 한 잔으로 2036년 내 몸을 지켜요!',
+          'END:VEVENT',
+          'END:VCALENDAR'
+        ].join('\r\n');
+        const ok = downloadTextFile('bio_twin_stretching_alarm.ics', ics, 'text/calendar;charset=utf-8');
+        showToast(ok ? '캘린더 알림 파일(.ics)을 저장했습니다. 열어 일정에 추가하세요!' : '일정 파일 저장에 실패했습니다.');
+      }
+
+      function exportJsonSnapshot() {
+        const m = computeHealthMetrics();
+        const payload = {
+          app: 'Bio-Twin Offline v2',
+          author: '20232818 전시헌',
+          exportedAt: new Date().toISOString(),
+          profile: {
+            age: m.age,
+            gender: state.gender,
+            heightCm: m.heightCm,
+            weightKg: m.weightKg,
+            bmi: Number(m.bmi.toFixed(1)),
+            job: m.jobLabel
+          },
+          habits: {
+            neckAngle: state.neckAngle,
+            sleepHours: state.sleepHours,
+            sittingHours: state.sittingHours,
+            waterCups: state.waterCups,
+            caffeineCups: state.caffeineCups
+          },
+          scores: {
+            current2026: m.currentScore,
+            peerAverage: m.avgScore,
+            diffFromAverage: m.scoreDiffFromAvg,
+            predicted2036: m.futureScore,
+            riskPercent: m.riskPercent
+          },
+          diseases: state.selectedDiseases
+        };
+        const ok = downloadTextFile('bio_twin_data.json', JSON.stringify(payload, null, 2), 'application/json;charset=utf-8');
+        showToast(ok ? '트윈 데이터(bio_twin_data.json)를 저장했습니다.' : '데이터 저장에 실패했습니다.');
+      }
+
+      // ---------------------------------------------------------------------
+      // 11. 웹캠 On-Device 토글 (오프라인 / 권한 거절 시에도 안전 폴백)
+      // ---------------------------------------------------------------------
+      async function toggleWebcam() {
+        const btn = document.getElementById('webcamToggleBtn');
+        const video = document.getElementById('cameraPreview');
+        const desc = document.getElementById('webcamStatusDesc');
+
+        if (state.webcamActive) {
+          if (state.webcamStream) {
+            state.webcamStream.getTracks().forEach((tr) => tr.stop());
+            state.webcamStream = null;
+          }
+          state.webcamActive = false;
+          if (video) {
+            video.srcObject = null;
+            video.classList.add('hidden');
+          }
+          if (btn) btn.textContent = '카메라 자세 확인 켜기';
+          if (desc) desc.textContent = '카메라를 종료했습니다. 영상은 저장·전송되지 않고 즉시 파기되었습니다.';
+          showToast('온디바이스 카메라를 안전하게 종료했습니다.');
+          return;
+        }
+
+        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+          showToast('이 환경에서는 카메라 API를 사용할 수 없어 슬라이더 모드로 작동합니다.');
+          return;
+        }
+
+        try {
+          const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' }, audio: false });
+          state.webcamStream = stream;
+          state.webcamActive = true;
+          if (video) {
+            video.srcObject = stream;
+            video.classList.remove('hidden');
+          }
+          if (btn) btn.textContent = '카메라 끄기 (즉시 파기)';
+          if (desc) desc.textContent = '온디바이스 카메라가 켜졌습니다. 거울처럼 내 목 각도를 확인하며 슬라이더를 맞춰 보세요 (외부 전송 0%).';
+          showToast('온디바이스 카메라 자세 확인이 켜졌습니다.');
+        } catch (err) {
+          showToast('카메라 권한이 없어 오프라인 슬라이더 시뮬레이션으로 계속합니다.');
+        }
+      }
+
+      // ---------------------------------------------------------------------
+      // 12. 이벤트 바인딩
+      // ---------------------------------------------------------------------
+      function bindEvents() {
+        // 상단 타임머신 전환
+        document.getElementById('btnYear2026')?.addEventListener('click', () => {
+          state.yearMode = '2026';
+          syncUI();
+          showToast('2026년 현재 실시간 모드로 전환했습니다.');
+        });
+
+        document.getElementById('btnYear2036')?.addEventListener('click', () => {
+          state.yearMode = '2036';
+          state.targetYaw = 0.95; // 2036 예측 시 측면 변화가 잘 보이도록 자연스럽게 회전
+          syncUI();
+          showToast('2036년(10년 후) 누적 체형·건강 예측 모드입니다.');
+        });
+
+        // 5단계 탭 & 이전/다음 버튼
+        document.querySelectorAll('.step-tab').forEach((tab) => {
+          tab.addEventListener('click', () => {
+            setStep(Number(tab.getAttribute('data-step')));
+          });
+        });
+
+        document.getElementById('prevStepBtn')?.addEventListener('click', () => {
+          if (state.currentStep > 1) setStep(state.currentStep - 1);
+        });
+
+        document.getElementById('nextStepBtn')?.addEventListener('click', () => {
+          if (state.currentStep === 1) {
+            const agreed = document.getElementById('privacyAgreeCheck')?.checked;
+            if (!agreed) {
+              showToast('온디바이스 개인정보 약속에 동의해 주세요.');
+              return;
+            }
+          }
+          setStep(state.currentStep === 5 ? 1 : state.currentStep + 1);
+        });
+
+        // 아바타 뷰어 버튼
+        document.getElementById('btnViewFront')?.addEventListener('click', () => {
+          state.targetYaw = 0;
+        });
+        document.getElementById('btnViewSide')?.addEventListener('click', () => {
+          state.targetYaw = 1.15;
+          showToast('측면 시점: 거북목 각도와 등 굽힘을 자세히 확인하세요.');
+        });
+        document.getElementById('btnAvatarStyle')?.addEventListener('click', () => {
+          state.avatarStyleIndex = (state.avatarStyleIndex + 1) % AVATAR_STYLES.length;
+          showToast(`아바타 스타일: ${AVATAR_STYLES[state.avatarStyleIndex].name}`);
+        });
+        document.getElementById('btnQuickStretch')?.addEventListener('click', () => {
+          state.neckAngle = 5;
+          state.sittingHours = Math.max(2, state.sittingHours - 2);
+          state.waterCups = Math.min(10, state.waterCups + 1);
+          state.stretchPulse = 1.0;
+          syncSliderInputs();
+          syncUI();
+          showToast('5분 스트레칭 실행! 아바타 자세와 2036 예측 점수가 즉시 회복되었습니다.');
+        });
+
+        // 캔버스 마우스/터치 드래그 회전
+        const stage = document.getElementById('canvasStage');
+        if (stage) {
+          stage.addEventListener('mousedown', (e) => {
+            state.isDragging = true;
+            state.lastDragX = e.clientX;
+          });
+          window.addEventListener('mousemove', (e) => {
+            if (!state.isDragging) return;
+            const dx = e.clientX - state.lastDragX;
+            state.lastDragX = e.clientX;
+            state.targetYaw += dx * 0.015;
+          });
+          window.addEventListener('mouseup', () => {
+            state.isDragging = false;
+          });
+
+          stage.addEventListener('touchstart', (e) => {
+            if (e.touches.length === 1) {
+              state.isDragging = true;
+              state.lastDragX = e.touches[0].clientX;
+            }
+          }, { passive: true });
+          stage.addEventListener('touchmove', (e) => {
+            if (!state.isDragging || e.touches.length !== 1) return;
+            const dx = e.touches[0].clientX - state.lastDragX;
+            state.lastDragX = e.touches[0].clientX;
+            state.targetYaw += dx * 0.018;
+          }, { passive: true });
+          stage.addEventListener('touchend', () => {
+            state.isDragging = false;
+          });
+        }
+
+        // 페르소나 프리셋 버튼
+        document.querySelectorAll('.persona-btn').forEach((btn) => {
+          btn.addEventListener('click', () => {
+            const key = btn.getAttribute('data-persona');
+            const p = PERSONA_PRESETS[key];
+            if (!p) return;
+            state.persona = key;
+            state.age = p.age;
+            state.gender = p.gender;
+            state.heightCm = p.heightCm;
+            state.weightKg = p.weightKg;
+            state.job = p.job;
+            state.neckAngle = p.neckAngle;
+            state.sleepHours = p.sleepHours;
+            state.sittingHours = p.sittingHours;
+            state.waterCups = p.waterCups;
+            state.caffeineCups = p.caffeineCups;
+
+            document.querySelectorAll('.persona-btn').forEach((b) => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            syncProfileSelectValues();
+            syncSliderInputs();
+            syncUI();
+            showToast(`${p.title} (${getCurrentJobInfo().label}) 프로필을 불러왔습니다.`);
+          });
+        });
+
+        // 1단계 프로필 5종 선택 이벤트
+        document.getElementById('inputAge')?.addEventListener('change', (e) => {
+          state.age = Number(e.target.value) || 22;
+          syncUI();
+        });
+        document.getElementById('inputGender')?.addEventListener('change', (e) => {
+          state.gender = e.target.value === 'male' ? 'male' : 'female';
+          syncUI();
+        });
+        document.getElementById('inputHeight')?.addEventListener('change', (e) => {
+          state.heightCm = Number(e.target.value) || 168;
+          syncUI();
+        });
+        document.getElementById('inputWeight')?.addEventListener('change', (e) => {
+          state.weightKg = Number(e.target.value) || 58;
+          syncUI();
+        });
+        document.getElementById('inputJob')?.addEventListener('change', (e) => {
+          state.job = e.target.value || 'student';
+          syncUI();
+          showToast(`직업이 '${getCurrentJobInfo().label}'(으)로 변경되었습니다.`);
+        });
+        document.getElementById('inputCustomJob')?.addEventListener('input', (e) => {
+          state.customJobTitle = e.target.value || '';
+          syncUI();
+        });
+
+        // 단계 이동 바로가기 버튼
+        document.getElementById('goToDiseaseCatalogBtn')?.addEventListener('click', () => {
+          setStep(2);
+          document.getElementById('diseaseSearchInput')?.focus();
+        });
+        document.getElementById('goToProfileStepBtn')?.addEventListener('click', () => setStep(1));
+        document.getElementById('goAddDiseaseFromResult')?.addEventListener('click', () => {
+          setStep(2);
+          document.getElementById('diseaseSearchInput')?.focus();
+        });
+
+        // 2단계 습관 슬라이더 & 카페인
+        document.getElementById('inputNeckAngle')?.addEventListener('input', (e) => {
+          state.neckAngle = Number(e.target.value);
+          syncUI();
+        });
+        document.getElementById('inputSleepHours')?.addEventListener('input', (e) => {
+          state.sleepHours = Number(e.target.value);
+          syncUI();
+        });
+        document.getElementById('inputSittingHours')?.addEventListener('input', (e) => {
+          state.sittingHours = Number(e.target.value);
+          syncUI();
+        });
+        document.getElementById('inputWaterCups')?.addEventListener('input', (e) => {
+          state.waterCups = Number(e.target.value);
+          syncUI();
+        });
+        document.getElementById('caffeineMinusBtn')?.addEventListener('click', () => {
+          state.caffeineCups = Math.max(0, state.caffeineCups - 1);
+          syncUI();
+        });
+        document.getElementById('caffeinePlusBtn')?.addEventListener('click', () => {
+          state.caffeineCups = Math.min(8, state.caffeineCups + 1);
+          syncUI();
+        });
+
+        document.getElementById('webcamToggleBtn')?.addEventListener('click', toggleWebcam);
+
+        // 질병 검색·계통 필터·직접 입력
+        document.getElementById('diseaseSystemFilter')?.addEventListener('change', (e) => {
+          state.diseaseSystemFilter = e.target.value || '전체';
+          renderDiseaseUI();
+        });
+        document.getElementById('diseaseSearchInput')?.addEventListener('input', (e) => {
+          state.diseaseQuery = e.target.value || '';
+          renderDiseaseUI();
+        });
+        document.getElementById('addCustomDiseaseBtn')?.addEventListener('click', addCustomDisease);
+        document.getElementById('customDiseaseInput')?.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            addCustomDisease();
+          }
+        });
+
+        // 질병 칩/목록/삭제 위임 이벤트
+        document.addEventListener('click', (e) => {
+          const toggleBtn = e.target.closest('[data-disease-id]');
+          if (toggleBtn) {
+            toggleDiseaseById(toggleBtn.getAttribute('data-disease-id'));
+            return;
+          }
+          const removeBtn = e.target.closest('[data-remove-disease]');
+          if (removeBtn) {
+            toggleDiseaseById(removeBtn.getAttribute('data-remove-disease'));
+          }
+        });
+
+        // 3단계 AI 코칭 즉시 실행 액션
+        document.querySelectorAll('.coach-btn').forEach((btn) => {
+          btn.addEventListener('click', () => {
+            const act = btn.getAttribute('data-action');
+            if (act === 'chin-tuck') {
+              state.neckAngle = Math.max(3, state.neckAngle - 6);
+              state.stretchPulse = 0.45;
+              showToast('1분 턱 당기기 완료! 목 각도가 6° 교정되었습니다.');
+            } else if (act === 'shoulder-open') {
+              state.sittingHours = Math.max(1, state.sittingHours - 1.5);
+              state.neckAngle = Math.max(4, state.neckAngle - 3);
+              state.stretchPulse = 0.75;
+              showToast('2분 가슴 열기 완료! 어깨 긴장과 좌식 피로가 줄었습니다.');
+            } else if (act === 'water-glass') {
+              state.waterCups = Math.min(10, state.waterCups + 1);
+              showToast('물 한 잔 섭취 완료! 수분 활력이 올라갔습니다.');
+            } else if (act === 'full-reset') {
+              state.neckAngle = 5;
+              state.sittingHours = Math.max(2, state.sittingHours - 2.5);
+              state.waterCups = Math.min(10, state.waterCups + 1);
+              state.stretchPulse = 1.0;
+              showToast('5분 풀 스트레칭 리셋! 아바타가 바른 자세로 회복되었습니다.');
+            }
+            syncSliderInputs();
+            syncUI();
+          });
+        });
+
+        // 4단계 스냅샷 저장 & 리포트 저장
+        document.getElementById('saveSnapshotBtn')?.addEventListener('click', () => {
+          const m = computeHealthMetrics();
+          const now = new Date();
+          const date = `${now.getMonth() + 1}/${now.getDate()}`;
+          const time = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+          state.history.unshift({
+            date,
+            time,
+            profile: `${m.age}세 ${m.jobLabel}`,
+            neck: state.neckAngle,
+            diseases: state.selectedDiseases.length,
+            s2026: m.currentScore,
+            s2036: m.futureScore
+          });
+          saveHistorySafe(state.history);
+          syncUI();
+          showToast('오늘 트윈 기록을 내 기기에 안전하게 저장했습니다.');
+        });
+
+        document.getElementById('downloadReportBtn')?.addEventListener('click', exportTextReport);
+
+        // 5단계 연동 & 기록 관리
+        document.getElementById('downloadCalendarBtn')?.addEventListener('click', exportCalendarIcs);
+        document.getElementById('exportJsonBtn')?.addEventListener('click', exportJsonSnapshot);
+        document.getElementById('simWearableSyncBtn')?.addEventListener('click', () => {
+          state.sleepHours = 7.5;
+          state.waterCups = Math.max(state.waterCups, 6);
+          syncSliderInputs();
+          syncUI();
+          showToast('워치 가상 동기화 완료: 어제 수면 7.5시간·활동량이 반영되었습니다.');
+        });
+        document.getElementById('clearHistoryBtn')?.addEventListener('click', () => {
+          state.history = [];
+          saveHistorySafe([]);
+          syncUI();
+          showToast('저장된 로컬 기록을 모두 비웠습니다.');
+        });
+        document.getElementById('footerQuickPrintBtn')?.addEventListener('click', () => {
+          window.print();
+        });
+
+        window.addEventListener('resize', resizeCanvas);
+      }
+
+      function syncProfileSelectValues() {
+        const setVal = (id, v) => {
+          const el = document.getElementById(id);
+          if (el) el.value = String(v);
+        };
+        setVal('inputAge', state.age);
+        setVal('inputGender', state.gender);
+        setVal('inputHeight', state.heightCm);
+        setVal('inputWeight', state.weightKg);
+        setVal('inputJob', state.job);
+      }
+
+      function syncSliderInputs() {
+        const setVal = (id, v) => {
+          const el = document.getElementById(id);
+          if (el) el.value = String(v);
+        };
+        setVal('inputNeckAngle', state.neckAngle);
+        setVal('inputSleepHours', state.sleepHours);
+        setVal('inputSittingHours', state.sittingHours);
+        setVal('inputWaterCups', state.waterCups);
+      }
+
+      // ---------------------------------------------------------------------
+      // 13. 초기화 (window.onload 보장)
+      // ---------------------------------------------------------------------
+      window.addEventListener('load', () => {
+        populateProfileSelects();
+        bindEvents();
+        setStep(1);
+        syncUI();
+        resizeCanvas();
+        window.requestAnimationFrame(renderHumanAvatar);
+      });
+    })();
+  </script>
+</body>
+</html>
